@@ -16,12 +16,15 @@ Each of these 40 subfolders include the below list of files:
 
 ### Input files
 #### In. file (Script of LIGGGHTS commands)
-(For more information on how they are generated: https://github.com/DamlaSerper/Packing-InFile-BatchFile_Generator)
+For more information on how they are generated:
+
+https://github.com/DamlaSerper/Packing-InFile-BatchFile_Generator
 
 - in.cent_walltype_walls_sizemultiplierX_transitionfraction (walltype: mesh, primitive; size_multiplier: 30, 45, 60, 75; transitionfraction: none (mesh case), 0.001, 0.005, 0,025, 0,050, 0.075, 0.100, 0.150, 0.200, 0.250)
 
 #### Mesh files (For representing geometries)
-(For more information on how they are generated: https://github.com/DamlaSerper/Parameterized_Centrifugal_Filter)
+For more information on how they are generated:
+https://github.com/DamlaSerper/Parameterized_Centrifugal_Filter
 
 - bottom_disk.stl 
 - bot_cyl.stl
@@ -32,7 +35,9 @@ Each of these 40 subfolders include the below list of files:
 - top_disk.stl
 
 #### Dump file (Initial no_overlap packing of particles)
-(For more information on how it is generated: https://github.com/DamlaSerper/Packing-InFile-BatchFile_Generator)
+For more information on how it is generated:
+
+https://github.com/DamlaSerper/Packing-InFile-BatchFile_Generator)
 
 - dump.atom_info_1
 
@@ -40,7 +45,9 @@ Each of these 40 subfolders include the below list of files:
 - lmp_puhti
 
 #### Batch file (For batch job submission to supercomputer)
-(For more information on how it is generated: https://github.com/DamlaSerper/Packing-InFile-BatchFile_Generator)
+For more information on how it is generated:
+
+https://github.com/DamlaSerper/Packing-InFile-BatchFile_Generator
 
 - b.walltype_sizemultiplierX_transitionfraction (walltype: mesh, prim; size_multiplier: 30, 45, 60, 75; transitionfraction: none (mesh case), 0.001, 0.005, 0,025, 0,050, 0.075, 0.100, 0.150, 0.200, 0.250)
 
