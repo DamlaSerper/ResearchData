@@ -1,7 +1,7 @@
 # ResearchData
 Research data of the linked journal article, is composed of input and output files of the LIGGGHTS simulations (Project folders) and an Excel data sheet (Results_Excel) which includes calculated data. 
 
-The contents are the simulation data and results of cake formation in centrifugal filtration using conventional (mesh) method and novel Switchable contact model (SCM, primitive) method. (For more information see article: )
+The contents are the simulation data and results of cake formation in centrifugal filtration using conventional (mesh) method and novel Switchable contact model (SCM, primitive) method. (For more information see the article: and the source code of SCM: https://github.com/DamlaSerper/SCM)
 
 ## Folder and file structure
 There are two main folders with names `Project_2005341` and `Project_2006017`, which contain the input and output files from 80 cases described in the article.
