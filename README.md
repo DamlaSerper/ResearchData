@@ -1,8 +1,10 @@
 # ResearchData
-Research data of the linked journal article, is composed of input and output files of the LIGGGHTS simulations (Project folders) and an Excel data sheet (Results_Excel) which includes calculated data.
+Research data of the linked journal article, is composed of input and output files of the LIGGGHTS simulations (Project folders) and an Excel data sheet (Results_Excel) which includes calculated data. 
+
+The contents are the simulation data and results of cake formation in centrifugal filtration using conventional (mesh) method and novel Switchable contact model (SCM, primitive) method. (For more information see article: )
 
 ## Folder and file structure
-There are two main folders with names `Project_2005341` and `Project_2006017`, which contain the input and output files from 80 cases described in article: .
+There are two main folders with names `Project_2005341` and `Project_2006017`, which contain the input and output files from 80 cases described in the article.
 
 Here the project numbers correspond to the HPC center project number.
 
@@ -13,10 +15,10 @@ Each project folder include 40 folders that are named according to rule: size_mu
 Each of these 40 subfolders include the below list of files:
 
 ### Input files
-#### In. file (Script of LIGGGHTS commands, more information on how they are generated:)
+#### In. file (Script of LIGGGHTS commands, more information on how they are generated: https://github.com/DamlaSerper/Packing-InFile-BatchFile_Generator)
 - in.cent_walltype_walls_sizemultiplierX_transitionfraction (walltype: mesh, primitive; size_multiplier: 30, 45, 60, 75; transitionfraction: none (mesh case), 0.001, 0.005, 0,025, 0,050, 0.075, 0.100, 0.150, 0.200, 0.250)
 
-#### Mesh files (For representing geometries, more information on how they are generated: )
+#### Mesh files (For representing geometries, more information on how they are generated: https://github.com/DamlaSerper/Parameterized_Centrifugal_Filter)
 - bottom_disk.stl 
 - bot_cyl.stl
 - cone.stl
@@ -25,13 +27,13 @@ Each of these 40 subfolders include the below list of files:
 - top_cyl.stl
 - top_disk.stl
 
-#### Dump file (Initial no_overlap packing of particles, more information on how it is generated:)
+#### Dump file (Initial no_overlap packing of particles, more information on how it is generated: https://github.com/DamlaSerper/Packing-InFile-BatchFile_Generator)
 - dump.atom_info_1
 
 #### LIGGGHTS executable file (Compiled on the supercomputer)
 - lmp_puhti
 
-#### Batch file (For batch job submission to supercomputer, more information on how it is generated:)
+#### Batch file (For batch job submission to supercomputer, more information on how it is generated:https://github.com/DamlaSerper/Packing-InFile-BatchFile_Generator)
 - b.walltype_sizemultiplierX_transitionfraction (walltype: mesh, prim; size_multiplier: 30, 45, 60, 75; transitionfraction: none (mesh case), 0.001, 0.005, 0,025, 0,050, 0.075, 0.100, 0.150, 0.200, 0.250)
 
 ### Output files
