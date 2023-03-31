@@ -8,7 +8,7 @@ Here the project numbers correspond to the HPC center project number.
 
 All of the first replicas are run on `Project_2005341`, while majority of the second replicas are run on `Project_2006017`(excluding cases 75X Mesh, 75X Primitive transition fraction 0.005, 75X Primitive transition fraction 0.100, which are run on `Project_2005341`but reported in folder `Project_2006017`).
 
-Each project folder include 40 folders that are named according to rule: size_mult_`sizemultiplier`_`walltype`_walls_`transitionfraction`. (`sizemultiplier:` 30, 45, 60, 75 `wall_type:` mesh, primitive `transitionfraction:` none (mesh case), 0.001, 0.005, 0,025, 0,050, 0.075, 0.100, 0.150, 0.200, 0.250)
+Each project folder include 40 folders that are named according to rule: size_mult_sizemultiplierwalls_walltype_walls_transitionfraction. (sizemultiplier: 30, 45, 60, 75; wall_type: mesh, primitive; transitionfraction: none (mesh case), 0.001, 0.005, 0,025, 0,050, 0.075, 0.100, 0.150, 0.200, 0.250)
 
 Each of these 40 subfolders include the below list of files:
 
