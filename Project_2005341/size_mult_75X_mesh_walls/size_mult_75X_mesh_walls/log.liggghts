@@ -1,0 +1,5798 @@
+LIGGGHTS (Version LIGGGHTS-PUBLIC 3.8.0, compiled 2022-11-07-16:55:38 by serperd1, git commit 86544c3f1215bc9744d7929e3eacf53ba086af9e)
+units si #
+dimension 3 #
+newton off #
+boundary f f f #
+atom_style sphere #
+pair_style gran model hertz tangential history #
+communicate single vel yes #
+region outer_basket cylinder y 0 0 0.15 -0.15 0.15 #
+create_box 3 outer_basket #
+Created orthogonal box = (-0.15 -0.15 -0.15) to (0.15 0.15 0.15)
+  2 by 4 by 5 MPI processor grid
+variable my_omega equal 157.0796 #
+fix cone_mesh all mesh/surface file cone.stl type 3 scale 1 #
+fix rotating_wall_1 all move/mesh mesh cone_mesh rotate/variable origin 0 0 0 axis 0 1 0 omega v_my_omega #
+fix filter_mesh_walls all mesh/surface file dem_walls_75X_14micronpore_mod_mesh.stl type 2 scale 1e-3 curvature 1e-5 #
+fix rotating_wall_2 all move/mesh mesh filter_mesh_walls rotate/variable origin 0 0 0 axis 0 1 0 omega v_my_omega #
+fix inlet_cyl_wall_mesh all mesh/surface file in_cyl.stl type 3 scale 1 #
+fix top_cyl_wall_mesh all mesh/surface file top_cyl.stl type 3 scale 1 #
+fix rotating_wall_4 all move/mesh mesh top_cyl_wall_mesh rotate/variable origin 0 0 0 axis 0 1 0 omega v_my_omega #
+fix bot_cyl_wall_mesh all mesh/surface file bot_cyl.stl type 3 scale 1 #
+fix rotating_wall_5 all move/mesh mesh bot_cyl_wall_mesh rotate/variable origin 0 0 0 axis 0 1 0 omega v_my_omega #
+fix bot_disk_wall_mesh all mesh/surface file bottom_disk.stl type 3 scale 1 #
+fix rotating_wall_6 all move/mesh mesh bot_disk_wall_mesh rotate/variable origin 0 0 0 axis 0 1 0 omega v_my_omega #
+fix top_disk_wall_mesh all mesh/surface file top_disk.stl type 3 scale 1 #
+fix rotating_wall_7 all move/mesh mesh top_disk_wall_mesh rotate/variable origin 0 0 0 axis 0 1 0 omega v_my_omega #
+fix GMSH_mesh_walls all wall/gran model hertz tangential history mesh n_meshes 7 meshes cone_mesh filter_mesh_walls top_cyl_wall_mesh bot_cyl_wall_mesh bot_disk_wall_mesh inlet_cyl_wall_mesh top_disk_wall_mesh #
+fix Young_mod all property/global youngsModulus peratomtype 375000000 46000000 1000000000 #
+fix Poisson_rat all property/global poissonsRatio peratomtype 0.32 0.42 0.29 #
+fix Coeff_rest all property/global coefficientRestitution peratomtypepair 3 0.15 0.32 0.475 0.32 0.49 0.645 0.475 0.645 0.8 #
+fix Coeff_fric all property/global coefficientFriction peratomtypepair 3 0.04 0.145 0.12 0.145 0.25 0.225 0.12 0.225 0.2 #
+
+neighbor 0.0006561 bin #
+neigh_modify delay 0 one 100000 page 5000000 #
+fix r_0to10p all particletemplate/sphere 12345787 atom_type 1 density constant 2650 radius constant 0.000105 #
+fix r_10to50p all particletemplate/sphere 15485863 atom_type 1 density constant 2650 radius constant 0.000291 #
+fix r_50to90p all particletemplate/sphere 15485867 atom_type 1 density constant 2650 radius constant 0.0010582 #
+fix r_90to100p all particletemplate/sphere 32452843 atom_type 1 density constant 2650 radius constant 0.0016402 #
+fix prob_par all particledistribution/discrete 32452867 4 r_0to10p 0.1 r_10to50p 0.4 r_50to90p 0.4 r_90to100p 0.1 #
+pair_coeff * * #
+timestep 8.0985e-08 #
+
+fix nve_group all nve/sphere #
+fix grav_fix all gravity 6.1081 vector 0.017 -0.0033 0 -1 0 #
+fix cent_fix all centrifugal 157.0796 0.017 -0.0033 0.069 #
+
+variable step equal step #
+variable mycount equal count(all) #
+fix print_amount_of_atoms all print 25 "${step} ${mycount}" file numatoms.txt screen no #
+run 0 #
+Setting up run at Wed Nov 23 15:05:57 2022
+
+Memory usage per processor = 1078.21 Mbytes
+    Step    Atoms         KinEng            CPU 
+       0        0              0              0 
+Loop time of 6.9658e-05 on 40 procs for 0 steps with 0 atoms, finish time Wed Nov 23 15:05:57 2022
+
+
+Pair  time (%) = 0 (0)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0 (0)
+Outpt time (%) = 0 (0)
+Other time (%) = 6.9658e-05 (100)
+
+Nlocal:    0 ave 0 max 0 min
+Histogram: 40 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 40 0 0 0 0 0 0 0 0 0
+Neighs:    0 ave 0 max 0 min
+Histogram: 40 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+run 1 #
+Setting up run at Wed Nov 23 15:05:57 2022
+
+Memory usage per processor = 1078.21 Mbytes
+    Step    Atoms         KinEng            CPU 
+       0        0              0              0 
+       1        0              0    0.012777948 
+Loop time of 0.0127883 on 40 procs for 1 steps with 0 atoms, finish time Wed Nov 23 15:05:57 2022
+
+
+Pair  time (%) = 2.91715e-06 (0.0228111)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000196841 (1.53923)
+Outpt time (%) = 0.000201565 (1.57617)
+Other time (%) = 0.012387 (96.8618)
+
+Nlocal:    0 ave 0 max 0 min
+Histogram: 40 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 40 0 0 0 0 0 0 0 0 0
+Neighs:    0 ave 0 max 0 min
+Histogram: 40 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+read_dump dump.atom_info_1 1 x y z radius vx vy vz box no add yes replace no #
+  orthogonal box = (-0.15 -0.15 -0.15) to (0.15 0.15 0.15)
+  0 atoms before read
+  305 atoms in snapshot
+  0 atoms purged
+  0 atoms replaced
+  0 atoms trimmed
+  305 atoms added
+  305 atoms after read
+set atom * type 1 density 2650 vy -0.011755 #
+  305 settings made for type
+  305 settings made for density
+  305 settings made for vy
+write_dump all mesh/stl filter_mesh_scaled*.stl filter_mesh_walls #
+run 1 #
+Setting up run at Wed Nov 23 15:05:58 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+       1      305  2.0479885e-07              0 
+       2      305  2.4141415e-07    0.012254937 
+Loop time of 0.0122763 on 40 procs for 1 steps with 305 atoms, finish time Wed Nov 23 15:05:58 2022
+
+
+Pair  time (%) = 2.47335e-06 (0.0201474)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 4.43958e-06 (0.0361639)
+Outpt time (%) = 0.000218403 (1.77907)
+Other time (%) = 0.012051 (98.1646)
+
+Nlocal:    7.625 ave 134 max 0 min
+Histogram: 36 2 0 0 0 0 0 0 0 2
+Nghost:    5.125 ave 59 max 0 min
+Histogram: 36 0 0 0 0 0 0 2 0 2
+Neighs:    2.375 ave 54 max 0 min
+Histogram: 37 1 0 0 0 1 0 0 0 1
+
+Total # of neighbors = 95
+Ave neighs/atom = 0.311475
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 15:05:58 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+       2      305  2.4141415e-07              0 
+  123480      305  6.0833846e-05      1667.5071 
+Loop time of 1667.51 on 40 procs for 123478 steps with 305 atoms, finish time Wed Nov 23 15:33:45 2022
+
+
+Pair  time (%) = 0.284007 (0.0170318)
+Neigh time (%) = 0.0578459 (0.003469)
+Comm  time (%) = 0.605556 (0.036315)
+Outpt time (%) = 0.000308543 (1.85033e-05)
+Other time (%) = 1666.56 (99.9432)
+
+Nlocal:    7.625 ave 136 max 0 min
+Histogram: 36 2 0 0 0 0 0 0 1 1
+Nghost:    5.15 ave 59 max 0 min
+Histogram: 36 0 0 0 0 0 0 2 0 2
+Neighs:    2.5 ave 57 max 0 min
+Histogram: 36 2 0 0 1 0 0 0 0 1
+
+Total # of neighbors = 100
+Ave neighs/atom = 0.327869
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 15:33:45 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+  123480      305  6.0833846e-05              0 
+  246958      305  4.3791858e-05      1735.4555 
+Loop time of 1735.46 on 40 procs for 123478 steps with 305 atoms, finish time Wed Nov 23 16:02:41 2022
+
+
+Pair  time (%) = 0.285991 (0.0164793)
+Neigh time (%) = 0.058624 (0.00337802)
+Comm  time (%) = 0.657023 (0.0378588)
+Outpt time (%) = 0.000271766 (1.56596e-05)
+Other time (%) = 1734.45 (99.9423)
+
+Nlocal:    7.625 ave 138 max 0 min
+Histogram: 36 2 0 0 0 0 0 0 1 1
+Nghost:    5.125 ave 56 max 0 min
+Histogram: 36 0 0 0 0 0 0 0 2 2
+Neighs:    2.475 ave 57 max 0 min
+Histogram: 36 2 0 0 1 0 0 0 0 1
+
+Total # of neighbors = 99
+Ave neighs/atom = 0.32459
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 16:02:41 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+  246958      305  4.3791858e-05              0 
+  370436      305  0.00038094199      1771.3453 
+Loop time of 1771.35 on 40 procs for 123478 steps with 305 atoms, finish time Wed Nov 23 16:32:12 2022
+
+
+Pair  time (%) = 0.28481 (0.0160787)
+Neigh time (%) = 0.0588359 (0.00332154)
+Comm  time (%) = 0.658635 (0.0371828)
+Outpt time (%) = 0.000615849 (3.47673e-05)
+Other time (%) = 1770.34 (99.9434)
+
+Nlocal:    7.625 ave 134 max 0 min
+Histogram: 36 0 2 0 0 0 0 0 1 1
+Nghost:    5.025 ave 61 max 0 min
+Histogram: 36 0 0 0 0 0 0 2 1 1
+Neighs:    2.475 ave 57 max 0 min
+Histogram: 36 2 0 0 1 0 0 0 0 1
+
+Total # of neighbors = 99
+Ave neighs/atom = 0.32459
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 16:32:12 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+  370436      305  0.00038094199              0 
+  493914      305  0.00028933811      1728.6329 
+Loop time of 1728.63 on 40 procs for 123478 steps with 305 atoms, finish time Wed Nov 23 17:01:01 2022
+
+
+Pair  time (%) = 0.286723 (0.0165867)
+Neigh time (%) = 0.0585013 (0.00338425)
+Comm  time (%) = 0.678258 (0.0392367)
+Outpt time (%) = 0.000674503 (3.90195e-05)
+Other time (%) = 1727.61 (99.9408)
+
+Nlocal:    7.625 ave 134 max 0 min
+Histogram: 36 0 2 0 0 0 0 0 1 1
+Nghost:    5.025 ave 59 max 0 min
+Histogram: 36 0 0 0 0 0 0 2 0 2
+Neighs:    2.425 ave 54 max 0 min
+Histogram: 36 1 1 0 1 0 0 0 0 1
+
+Total # of neighbors = 97
+Ave neighs/atom = 0.318033
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 17:01:01 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+  493914      305  0.00028933811              0 
+  617392      305   0.0020121835      1694.2872 
+Loop time of 1694.29 on 40 procs for 123478 steps with 305 atoms, finish time Wed Nov 23 17:29:15 2022
+
+
+Pair  time (%) = 0.286073 (0.0168846)
+Neigh time (%) = 0.0592235 (0.00349548)
+Comm  time (%) = 0.679954 (0.0401322)
+Outpt time (%) = 0.000370875 (2.18898e-05)
+Other time (%) = 1693.26 (99.9395)
+
+Nlocal:    7.625 ave 134 max 0 min
+Histogram: 36 0 2 0 0 0 0 1 0 1
+Nghost:    5 ave 59 max 0 min
+Histogram: 36 0 0 0 0 0 1 1 0 2
+Neighs:    2.5 ave 55 max 0 min
+Histogram: 36 1 1 0 1 0 0 0 0 1
+
+Total # of neighbors = 100
+Ave neighs/atom = 0.327869
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 17:29:16 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+  617392      305   0.0020121835              0 
+  740870      305   0.0010940179      1759.0556 
+Loop time of 1759.06 on 40 procs for 123478 steps with 305 atoms, finish time Wed Nov 23 17:58:35 2022
+
+
+Pair  time (%) = 0.291201 (0.0165544)
+Neigh time (%) = 0.05788 (0.0032904)
+Comm  time (%) = 0.727419 (0.0413528)
+Outpt time (%) = 0.000685568 (3.89736e-05)
+Other time (%) = 1757.98 (99.9388)
+
+Nlocal:    7.625 ave 133 max 0 min
+Histogram: 36 0 2 0 0 0 0 1 0 1
+Nghost:    5 ave 58 max 0 min
+Histogram: 36 0 0 0 0 0 1 1 0 2
+Neighs:    2.375 ave 54 max 0 min
+Histogram: 36 1 1 1 0 0 0 0 0 1
+
+Total # of neighbors = 95
+Ave neighs/atom = 0.311475
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 17:58:35 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+  740870      305   0.0010940179              0 
+  864348      304   0.0016630154      1809.3048 
+Loop time of 1809.31 on 40 procs for 123478 steps with 304 atoms, finish time Wed Nov 23 18:28:44 2022
+
+
+Pair  time (%) = 0.288677 (0.0159551)
+Neigh time (%) = 0.0585935 (0.00323845)
+Comm  time (%) = 0.647955 (0.0358123)
+Outpt time (%) = 0.000392939 (2.17177e-05)
+Other time (%) = 1808.31 (99.945)
+
+Nlocal:    7.6 ave 132 max 0 min
+Histogram: 36 1 1 0 0 0 0 1 0 1
+Nghost:    5.225 ave 60 max 0 min
+Histogram: 36 0 0 0 0 0 1 0 1 2
+Neighs:    2.4 ave 54 max 0 min
+Histogram: 36 1 1 1 0 0 0 0 0 1
+
+Total # of neighbors = 96
+Ave neighs/atom = 0.315789
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 18:28:44 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+  864348      304   0.0016630154              0 
+  987826      304   0.0014661475       1672.331 
+Loop time of 1672.33 on 40 procs for 123478 steps with 304 atoms, finish time Wed Nov 23 18:56:36 2022
+
+
+Pair  time (%) = 0.286703 (0.0171439)
+Neigh time (%) = 0.0582353 (0.00348228)
+Comm  time (%) = 0.63726 (0.0381061)
+Outpt time (%) = 0.000674747 (4.03477e-05)
+Other time (%) = 1671.35 (99.9412)
+
+Nlocal:    7.6 ave 132 max 0 min
+Histogram: 36 1 1 0 0 0 0 1 0 1
+Nghost:    5.325 ave 62 max 0 min
+Histogram: 36 0 0 0 0 0 1 0 1 2
+Neighs:    2.4 ave 57 max 0 min
+Histogram: 36 2 0 1 0 0 0 0 0 1
+
+Total # of neighbors = 96
+Ave neighs/atom = 0.315789
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 18:56:36 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+  987826      304   0.0014661475              0 
+ 1111304      304   0.0016762741      1695.8309 
+Loop time of 1695.83 on 40 procs for 123478 steps with 304 atoms, finish time Wed Nov 23 19:24:52 2022
+
+
+Pair  time (%) = 0.287167 (0.0169337)
+Neigh time (%) = 0.0584882 (0.00344894)
+Comm  time (%) = 0.66308 (0.0391006)
+Outpt time (%) = 0.000368716 (2.17425e-05)
+Other time (%) = 1694.82 (99.9405)
+
+Nlocal:    7.6 ave 129 max 0 min
+Histogram: 36 0 2 0 0 0 0 1 0 1
+Nghost:    5.3 ave 59 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 1 2
+Neighs:    2.375 ave 57 max 0 min
+Histogram: 36 2 0 1 0 0 0 0 0 1
+
+Total # of neighbors = 95
+Ave neighs/atom = 0.3125
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 19:24:52 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 1111304      304   0.0016762741              0 
+ 1234782      304   0.0022455948       1665.889 
+Loop time of 1665.89 on 40 procs for 123478 steps with 304 atoms, finish time Wed Nov 23 19:52:38 2022
+
+
+Pair  time (%) = 0.285626 (0.0171456)
+Neigh time (%) = 0.0581986 (0.00349355)
+Comm  time (%) = 0.84386 (0.0506552)
+Outpt time (%) = 0.000345988 (2.07689e-05)
+Other time (%) = 1664.7 (99.9287)
+
+Nlocal:    7.6 ave 128 max 0 min
+Histogram: 36 1 1 0 0 0 0 0 1 1
+Nghost:    5.3 ave 55 max 0 min
+Histogram: 36 0 0 0 0 0 0 0 1 3
+Neighs:    2.425 ave 59 max 0 min
+Histogram: 36 2 0 1 0 0 0 0 0 1
+
+Total # of neighbors = 97
+Ave neighs/atom = 0.319079
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 19:52:38 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 1234782      304   0.0022455948              0 
+ 1358260      304   0.0022692441      1670.3802 
+Loop time of 1670.38 on 40 procs for 123478 steps with 304 atoms, finish time Wed Nov 23 20:20:29 2022
+
+
+Pair  time (%) = 0.2871 (0.0171877)
+Neigh time (%) = 0.0581214 (0.00347953)
+Comm  time (%) = 0.668135 (0.039999)
+Outpt time (%) = 0.000721271 (4.318e-05)
+Other time (%) = 1669.37 (99.9393)
+
+Nlocal:    7.6 ave 123 max 0 min
+Histogram: 36 0 2 0 0 0 0 0 1 1
+Nghost:    5.225 ave 60 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 2 1
+Neighs:    2.475 ave 60 max 0 min
+Histogram: 36 2 0 1 0 0 0 0 0 1
+
+Total # of neighbors = 99
+Ave neighs/atom = 0.325658
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 20:20:29 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 1358260      304   0.0022692441              0 
+ 1481738      304   0.0032236714      1673.2783 
+Loop time of 1673.28 on 40 procs for 123478 steps with 304 atoms, finish time Wed Nov 23 20:48:22 2022
+
+
+Pair  time (%) = 0.286625 (0.0171296)
+Neigh time (%) = 0.0578565 (0.00345767)
+Comm  time (%) = 0.973765 (0.058195)
+Outpt time (%) = 0.000321585 (1.92188e-05)
+Other time (%) = 1671.96 (99.9212)
+
+Nlocal:    7.6 ave 120 max 0 min
+Histogram: 36 0 2 0 0 0 0 0 1 1
+Nghost:    5.35 ave 62 max 0 min
+Histogram: 36 0 0 0 0 0 1 0 1 2
+Neighs:    2.575 ave 59 max 0 min
+Histogram: 36 1 1 1 0 0 0 0 0 1
+
+Total # of neighbors = 103
+Ave neighs/atom = 0.338816
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 20:48:22 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 1481738      304   0.0032236714              0 
+ 1605216      303   0.0027218172      1667.5962 
+Loop time of 1667.6 on 40 procs for 123478 steps with 303 atoms, finish time Wed Nov 23 21:16:10 2022
+
+
+Pair  time (%) = 0.286022 (0.0171517)
+Neigh time (%) = 0.0580496 (0.00348104)
+Comm  time (%) = 0.873871 (0.052403)
+Outpt time (%) = 0.000700958 (4.2034e-05)
+Other time (%) = 1666.38 (99.9269)
+
+Nlocal:    7.575 ave 119 max 0 min
+Histogram: 36 0 2 0 0 0 0 0 1 1
+Nghost:    5.35 ave 62 max 0 min
+Histogram: 36 0 0 0 0 0 1 1 0 2
+Neighs:    2.625 ave 59 max 0 min
+Histogram: 36 1 1 1 0 0 0 0 0 1
+
+Total # of neighbors = 105
+Ave neighs/atom = 0.346535
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 21:16:10 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 1605216      303   0.0027218172              0 
+ 1728694      303   0.0029629887      1675.6096 
+Loop time of 1675.61 on 40 procs for 123478 steps with 303 atoms, finish time Wed Nov 23 21:44:05 2022
+
+
+Pair  time (%) = 0.287527 (0.0171595)
+Neigh time (%) = 0.0586934 (0.00350281)
+Comm  time (%) = 0.715995 (0.0427304)
+Outpt time (%) = 0.000385844 (2.30271e-05)
+Other time (%) = 1674.55 (99.9366)
+
+Nlocal:    7.575 ave 116 max 0 min
+Histogram: 36 0 1 1 0 0 0 0 1 1
+Nghost:    5.275 ave 64 max 0 min
+Histogram: 36 0 0 0 0 0 1 1 1 1
+Neighs:    2.625 ave 54 max 0 min
+Histogram: 36 1 0 1 1 0 0 0 0 1
+
+Total # of neighbors = 105
+Ave neighs/atom = 0.346535
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 21:44:06 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 1728694      303   0.0029629887              0 
+ 1852172      302   0.0032349941      1681.1278 
+Loop time of 1681.13 on 40 procs for 123478 steps with 302 atoms, finish time Wed Nov 23 22:12:07 2022
+
+
+Pair  time (%) = 0.2853 (0.0169707)
+Neigh time (%) = 0.0588174 (0.00349869)
+Comm  time (%) = 0.684771 (0.0407328)
+Outpt time (%) = 0.000723042 (4.30094e-05)
+Other time (%) = 1680.1 (99.9388)
+
+Nlocal:    7.55 ave 113 max 0 min
+Histogram: 36 0 1 1 0 0 0 0 1 1
+Nghost:    5.275 ave 66 max 0 min
+Histogram: 36 0 0 0 0 0 2 0 1 1
+Neighs:    2.6 ave 51 max 0 min
+Histogram: 36 1 0 0 2 0 0 0 0 1
+
+Total # of neighbors = 104
+Ave neighs/atom = 0.344371
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 22:12:07 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 1852172      302   0.0032349941              0 
+ 1975650      302   0.0042327486      1671.8911 
+Loop time of 1671.9 on 40 procs for 123478 steps with 302 atoms, finish time Wed Nov 23 22:39:59 2022
+
+
+Pair  time (%) = 0.284691 (0.017028)
+Neigh time (%) = 0.0589292 (0.00352468)
+Comm  time (%) = 0.781027 (0.0467149)
+Outpt time (%) = 0.00010197 (6.09904e-06)
+Other time (%) = 1670.78 (99.9327)
+
+Nlocal:    7.55 ave 110 max 0 min
+Histogram: 36 0 0 2 0 0 0 0 1 1
+Nghost:    5.175 ave 65 max 0 min
+Histogram: 36 0 0 0 0 0 2 0 1 1
+Neighs:    2.575 ave 51 max 0 min
+Histogram: 36 1 0 0 2 0 0 0 0 1
+
+Total # of neighbors = 103
+Ave neighs/atom = 0.34106
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 22:39:59 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 1975650      302   0.0042327486              0 
+ 2099128      301   0.0041075267      1677.7841 
+Loop time of 1677.78 on 40 procs for 123478 steps with 301 atoms, finish time Wed Nov 23 23:07:57 2022
+
+
+Pair  time (%) = 0.284667 (0.0169668)
+Neigh time (%) = 0.0589933 (0.00351615)
+Comm  time (%) = 0.854277 (0.0509169)
+Outpt time (%) = 0.000668722 (3.98575e-05)
+Other time (%) = 1676.59 (99.9286)
+
+Nlocal:    7.525 ave 107 max 0 min
+Histogram: 36 0 0 2 0 0 0 0 0 2
+Nghost:    5.025 ave 66 max 0 min
+Histogram: 36 0 0 0 0 1 1 1 0 1
+Neighs:    2.775 ave 53 max 0 min
+Histogram: 36 1 0 0 1 1 0 0 0 1
+
+Total # of neighbors = 111
+Ave neighs/atom = 0.368771
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 23:07:57 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 2099128      301   0.0041075267              0 
+ 2222606      301   0.0048891352      1680.1489 
+Loop time of 1680.15 on 40 procs for 123478 steps with 301 atoms, finish time Wed Nov 23 23:35:57 2022
+
+
+Pair  time (%) = 0.282397 (0.0168079)
+Neigh time (%) = 0.059209 (0.00352403)
+Comm  time (%) = 0.772285 (0.0459653)
+Outpt time (%) = 0.000434641 (2.58692e-05)
+Other time (%) = 1679.03 (99.9337)
+
+Nlocal:    7.525 ave 106 max 0 min
+Histogram: 36 0 0 2 0 0 0 0 0 2
+Nghost:    5.05 ave 67 max 0 min
+Histogram: 36 0 0 0 0 1 1 1 0 1
+Neighs:    2.675 ave 50 max 0 min
+Histogram: 36 1 0 0 1 1 0 0 0 1
+
+Total # of neighbors = 107
+Ave neighs/atom = 0.355482
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Wed Nov 23 23:35:57 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 2222606      301   0.0048891352              0 
+ 2346084      301   0.0052031567      1676.6658 
+Loop time of 1676.67 on 40 procs for 123478 steps with 301 atoms, finish time Thu Nov 24 00:03:54 2022
+
+
+Pair  time (%) = 0.282886 (0.016872)
+Neigh time (%) = 0.059094 (0.00352449)
+Comm  time (%) = 0.674117 (0.0402058)
+Outpt time (%) = 0.000433658 (2.58643e-05)
+Other time (%) = 1675.65 (99.9394)
+
+Nlocal:    7.525 ave 104 max 0 min
+Histogram: 36 0 0 2 0 0 0 0 0 2
+Nghost:    5.1 ave 66 max 0 min
+Histogram: 36 0 0 0 0 0 2 1 0 1
+Neighs:    2.4 ave 41 max 0 min
+Histogram: 36 1 0 0 0 1 1 0 0 1
+
+Total # of neighbors = 96
+Ave neighs/atom = 0.318937
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 00:03:54 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 2346084      301   0.0052031567              0 
+ 2469562      301   0.0063381852      1678.9754 
+Loop time of 1678.98 on 40 procs for 123478 steps with 301 atoms, finish time Thu Nov 24 00:31:53 2022
+
+
+Pair  time (%) = 0.282727 (0.0168393)
+Neigh time (%) = 0.0593069 (0.00353233)
+Comm  time (%) = 0.827878 (0.0493085)
+Outpt time (%) = 0.000776283 (4.62355e-05)
+Other time (%) = 1677.8 (99.9303)
+
+Nlocal:    7.525 ave 102 max 0 min
+Histogram: 36 0 0 1 1 0 0 0 0 2
+Nghost:    4.975 ave 65 max 0 min
+Histogram: 36 0 0 0 0 0 2 1 0 1
+Neighs:    2.4 ave 42 max 0 min
+Histogram: 36 1 0 0 0 2 0 0 0 1
+
+Total # of neighbors = 96
+Ave neighs/atom = 0.318937
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 00:31:53 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 2469562      301   0.0063381852              0 
+ 2593040      301   0.0067979857      1678.3907 
+Loop time of 1678.39 on 40 procs for 123478 steps with 301 atoms, finish time Thu Nov 24 00:59:51 2022
+
+
+Pair  time (%) = 0.281569 (0.0167761)
+Neigh time (%) = 0.0600138 (0.00357567)
+Comm  time (%) = 0.843169 (0.0502368)
+Outpt time (%) = 0.000423962 (2.526e-05)
+Other time (%) = 1677.21 (99.9294)
+
+Nlocal:    7.525 ave 101 max 0 min
+Histogram: 35 1 0 1 1 0 0 0 0 2
+Nghost:    5 ave 66 max 0 min
+Histogram: 36 0 0 0 0 1 1 1 0 1
+Neighs:    2.125 ave 33 max 0 min
+Histogram: 36 1 0 0 0 0 1 1 0 1
+
+Total # of neighbors = 85
+Ave neighs/atom = 0.282392
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 00:59:51 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 2593040      301   0.0067979857              0 
+ 2716518      301   0.0072391243      1669.7882 
+Loop time of 1669.79 on 40 procs for 123478 steps with 301 atoms, finish time Thu Nov 24 01:27:41 2022
+
+
+Pair  time (%) = 0.281698 (0.0168703)
+Neigh time (%) = 0.0593312 (0.00355322)
+Comm  time (%) = 0.798404 (0.0478147)
+Outpt time (%) = 0.000820876 (4.91605e-05)
+Other time (%) = 1668.65 (99.9317)
+
+Nlocal:    7.525 ave 101 max 0 min
+Histogram: 36 0 0 1 1 0 0 0 0 2
+Nghost:    4.8 ave 62 max 0 min
+Histogram: 36 0 0 0 0 0 2 1 0 1
+Neighs:    2.125 ave 36 max 0 min
+Histogram: 36 0 1 0 1 0 1 0 0 1
+
+Total # of neighbors = 85
+Ave neighs/atom = 0.282392
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 01:27:41 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 2716518      301   0.0072391243              0 
+ 2839996      301   0.0080912444      1693.4119 
+Loop time of 1693.41 on 40 procs for 123478 steps with 301 atoms, finish time Thu Nov 24 01:55:54 2022
+
+
+Pair  time (%) = 0.27956 (0.0165087)
+Neigh time (%) = 0.0591371 (0.00349218)
+Comm  time (%) = 0.677375 (0.0400006)
+Outpt time (%) = 0.000590171 (3.4851e-05)
+Other time (%) = 1692.4 (99.94)
+
+Nlocal:    7.525 ave 100 max 0 min
+Histogram: 35 1 0 1 1 0 0 0 0 2
+Nghost:    4.875 ave 61 max 0 min
+Histogram: 36 0 0 0 0 0 2 0 1 1
+Neighs:    2.1 ave 36 max 0 min
+Histogram: 36 1 0 0 1 0 1 0 0 1
+
+Total # of neighbors = 84
+Ave neighs/atom = 0.27907
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 01:55:54 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 2839996      301   0.0080912444              0 
+ 2963474      301   0.0096488742       1688.499 
+Loop time of 1688.5 on 40 procs for 123478 steps with 301 atoms, finish time Thu Nov 24 02:24:03 2022
+
+
+Pair  time (%) = 0.280335 (0.0166026)
+Neigh time (%) = 0.0591239 (0.00350157)
+Comm  time (%) = 0.929981 (0.0550774)
+Outpt time (%) = 0.000819651 (4.85432e-05)
+Other time (%) = 1687.23 (99.9248)
+
+Nlocal:    7.525 ave 98 max 0 min
+Histogram: 35 1 0 1 1 0 0 0 0 2
+Nghost:    4.875 ave 62 max 0 min
+Histogram: 36 0 0 0 0 1 1 1 0 1
+Neighs:    2.125 ave 36 max 0 min
+Histogram: 36 0 0 2 0 0 1 0 0 1
+
+Total # of neighbors = 85
+Ave neighs/atom = 0.282392
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 02:24:03 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 2963474      301   0.0096488742              0 
+ 3086952      300   0.0092599893      1680.2879 
+Loop time of 1680.29 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 02:52:03 2022
+
+
+Pair  time (%) = 0.279902 (0.016658)
+Neigh time (%) = 0.0588291 (0.00350113)
+Comm  time (%) = 0.946531 (0.0563315)
+Outpt time (%) = 0.00053339 (3.1744e-05)
+Other time (%) = 1679 (99.9235)
+
+Nlocal:    7.5 ave 98 max 0 min
+Histogram: 35 1 0 2 0 0 0 0 0 2
+Nghost:    4.85 ave 61 max 0 min
+Histogram: 36 0 0 0 0 0 1 2 0 1
+Neighs:    2.1 ave 32 max 0 min
+Histogram: 36 0 1 1 0 0 0 0 0 2
+
+Total # of neighbors = 84
+Ave neighs/atom = 0.28
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 02:52:03 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 3086952      300   0.0092599893              0 
+ 3210430      300   0.0098263471       1682.882 
+Loop time of 1682.88 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 03:20:06 2022
+
+
+Pair  time (%) = 0.278343 (0.0165396)
+Neigh time (%) = 0.0595003 (0.00353562)
+Comm  time (%) = 0.860546 (0.0511352)
+Outpt time (%) = 0.000440435 (2.61715e-05)
+Other time (%) = 1681.68 (99.9288)
+
+Nlocal:    7.5 ave 97 max 0 min
+Histogram: 34 2 0 2 0 0 0 0 0 2
+Nghost:    4.775 ave 62 max 0 min
+Histogram: 36 0 0 0 0 0 2 1 0 1
+Neighs:    1.975 ave 31 max 0 min
+Histogram: 36 0 1 1 0 0 0 0 0 2
+
+Total # of neighbors = 79
+Ave neighs/atom = 0.263333
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 03:20:06 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 3210430      300   0.0098263471              0 
+ 3333908      300    0.010849935      1682.4835 
+Loop time of 1682.48 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 03:48:09 2022
+
+
+Pair  time (%) = 0.27789 (0.0165167)
+Neigh time (%) = 0.0592583 (0.00352208)
+Comm  time (%) = 0.778819 (0.0462898)
+Outpt time (%) = 0.000771689 (4.58661e-05)
+Other time (%) = 1681.37 (99.9336)
+
+Nlocal:    7.5 ave 95 max 0 min
+Histogram: 34 2 0 1 1 0 0 0 0 2
+Nghost:    4.675 ave 62 max 0 min
+Histogram: 36 0 0 0 0 0 3 0 0 1
+Neighs:    1.975 ave 29 max 0 min
+Histogram: 36 0 1 0 1 0 0 0 0 2
+
+Total # of neighbors = 79
+Ave neighs/atom = 0.263333
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 03:48:09 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 3333908      300    0.010849935              0 
+ 3457386      300    0.011165682      1683.8992 
+Loop time of 1683.9 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 04:16:13 2022
+
+
+Pair  time (%) = 0.278115 (0.0165161)
+Neigh time (%) = 0.0594186 (0.00352863)
+Comm  time (%) = 0.933698 (0.0554486)
+Outpt time (%) = 0.000513851 (3.05156e-05)
+Other time (%) = 1682.63 (99.9245)
+
+Nlocal:    7.5 ave 95 max 0 min
+Histogram: 35 1 0 0 2 0 0 0 0 2
+Nghost:    4.725 ave 59 max 0 min
+Histogram: 36 0 0 0 0 0 2 1 0 1
+Neighs:    1.925 ave 29 max 0 min
+Histogram: 36 0 0 1 1 0 0 0 1 1
+
+Total # of neighbors = 77
+Ave neighs/atom = 0.256667
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 04:16:13 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 3457386      300    0.011165682              0 
+ 3580864      300    0.012033035      1675.6434 
+Loop time of 1675.64 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 04:44:09 2022
+
+
+Pair  time (%) = 0.275437 (0.0164377)
+Neigh time (%) = 0.0590175 (0.00352208)
+Comm  time (%) = 0.946992 (0.0565151)
+Outpt time (%) = 0.000783277 (4.67448e-05)
+Other time (%) = 1674.36 (99.9235)
+
+Nlocal:    7.5 ave 94 max 0 min
+Histogram: 34 2 0 1 1 0 0 0 0 2
+Nghost:    4.725 ave 60 max 0 min
+Histogram: 36 0 0 0 0 0 2 1 0 1
+Neighs:    1.85 ave 27 max 0 min
+Histogram: 36 0 0 1 1 0 0 0 0 2
+
+Total # of neighbors = 74
+Ave neighs/atom = 0.246667
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 04:44:09 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 3580864      300    0.012033035              0 
+ 3704342      300    0.013133949      1685.5136 
+Loop time of 1685.51 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 05:12:14 2022
+
+
+Pair  time (%) = 0.276394 (0.0163982)
+Neigh time (%) = 0.0594101 (0.00352475)
+Comm  time (%) = 0.965066 (0.0572565)
+Outpt time (%) = 0.000553426 (3.28343e-05)
+Other time (%) = 1684.21 (99.9228)
+
+Nlocal:    7.5 ave 94 max 0 min
+Histogram: 35 0 1 1 1 0 0 0 0 2
+Nghost:    4.7 ave 60 max 0 min
+Histogram: 36 0 0 0 0 0 2 1 0 1
+Neighs:    1.95 ave 28 max 0 min
+Histogram: 36 0 0 2 0 0 0 0 0 2
+
+Total # of neighbors = 78
+Ave neighs/atom = 0.26
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 05:12:14 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 3704342      300    0.013133949              0 
+ 3827820      300    0.014452237      1689.3064 
+Loop time of 1689.31 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 05:40:24 2022
+
+
+Pair  time (%) = 0.277208 (0.0164095)
+Neigh time (%) = 0.0590626 (0.00349627)
+Comm  time (%) = 0.803056 (0.0475376)
+Outpt time (%) = 0.000891405 (5.27675e-05)
+Other time (%) = 1688.17 (99.9325)
+
+Nlocal:    7.5 ave 94 max 0 min
+Histogram: 34 2 0 0 1 1 0 0 0 2
+Nghost:    4.7 ave 59 max 0 min
+Histogram: 35 1 0 0 0 0 2 1 0 1
+Neighs:    1.875 ave 28 max 0 min
+Histogram: 36 0 0 1 0 1 0 0 1 1
+
+Total # of neighbors = 75
+Ave neighs/atom = 0.25
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 05:40:24 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 3827820      300    0.014452237              0 
+ 3951298      300    0.015211396      1683.8291 
+Loop time of 1683.83 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 06:08:28 2022
+
+
+Pair  time (%) = 0.276562 (0.0164246)
+Neigh time (%) = 0.0593566 (0.0035251)
+Comm  time (%) = 0.885559 (0.052592)
+Outpt time (%) = 0.000486104 (2.88689e-05)
+Other time (%) = 1682.61 (99.9274)
+
+Nlocal:    7.5 ave 93 max 0 min
+Histogram: 33 3 0 0 2 0 0 0 0 2
+Nghost:    4.6 ave 57 max 0 min
+Histogram: 36 0 0 0 0 0 1 2 0 1
+Neighs:    2 ave 28 max 0 min
+Histogram: 36 0 0 1 0 1 0 0 0 2
+
+Total # of neighbors = 80
+Ave neighs/atom = 0.266667
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 06:08:28 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 3951298      300    0.015211396              0 
+ 4074776      300     0.01576884      1694.2141 
+Loop time of 1694.22 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 06:36:42 2022
+
+
+Pair  time (%) = 0.276727 (0.0163335)
+Neigh time (%) = 0.0594424 (0.00350853)
+Comm  time (%) = 1.06496 (0.0628582)
+Outpt time (%) = 0.0124788 (0.000736549)
+Other time (%) = 1692.81 (99.9166)
+
+Nlocal:    7.5 ave 94 max 0 min
+Histogram: 33 3 0 1 1 0 0 0 1 1
+Nghost:    4.625 ave 53 max 0 min
+Histogram: 36 0 0 0 0 0 0 2 1 1
+Neighs:    2.05 ave 30 max 0 min
+Histogram: 36 0 1 0 0 1 0 0 0 2
+
+Total # of neighbors = 82
+Ave neighs/atom = 0.273333
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 06:36:42 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 4074776      300     0.01576884              0 
+ 4198254      300    0.016652534      1683.1467 
+Loop time of 1683.15 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 07:04:45 2022
+
+
+Pair  time (%) = 0.27836 (0.0165381)
+Neigh time (%) = 0.0595294 (0.00353679)
+Comm  time (%) = 1.00624 (0.0597833)
+Outpt time (%) = 0.000837052 (4.97314e-05)
+Other time (%) = 1681.8 (99.9201)
+
+Nlocal:    7.5 ave 93 max 0 min
+Histogram: 33 3 0 0 2 0 0 0 1 1
+Nghost:    4.675 ave 55 max 0 min
+Histogram: 36 0 0 0 0 0 0 2 1 1
+Neighs:    1.95 ave 29 max 0 min
+Histogram: 36 0 1 1 0 0 0 0 0 2
+
+Total # of neighbors = 78
+Ave neighs/atom = 0.26
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 07:04:45 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 4198254      300    0.016652534              0 
+ 4321732      300    0.018230287      1692.4098 
+Loop time of 1692.41 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 07:32:58 2022
+
+
+Pair  time (%) = 0.278372 (0.0164483)
+Neigh time (%) = 0.0592482 (0.00350081)
+Comm  time (%) = 0.938142 (0.0554323)
+Outpt time (%) = 0.000654227 (3.86566e-05)
+Other time (%) = 1691.13 (99.9246)
+
+Nlocal:    7.5 ave 94 max 0 min
+Histogram: 33 3 0 0 2 0 0 0 1 1
+Nghost:    4.6 ave 51 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 1 2
+Neighs:    2.05 ave 31 max 0 min
+Histogram: 36 0 1 0 1 0 0 0 0 2
+
+Total # of neighbors = 82
+Ave neighs/atom = 0.273333
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 07:32:58 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 4321732      300    0.018230287              0 
+ 4445210      300    0.018457567      1697.1123 
+Loop time of 1697.11 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 08:01:15 2022
+
+
+Pair  time (%) = 0.279444 (0.0164658)
+Neigh time (%) = 0.0593773 (0.00349873)
+Comm  time (%) = 0.943882 (0.0556169)
+Outpt time (%) = 0.000897212 (5.2867e-05)
+Other time (%) = 1695.83 (99.9244)
+
+Nlocal:    7.5 ave 94 max 0 min
+Histogram: 34 2 0 1 1 0 0 0 1 1
+Nghost:    4.55 ave 50 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 1 2
+Neighs:    2.25 ave 37 max 0 min
+Histogram: 36 0 2 0 0 0 0 0 1 1
+
+Total # of neighbors = 90
+Ave neighs/atom = 0.3
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 08:01:15 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 4445210      300    0.018457567              0 
+ 4568688      300     0.01925143      1688.0064 
+Loop time of 1688.01 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 08:29:23 2022
+
+
+Pair  time (%) = 0.277982 (0.016468)
+Neigh time (%) = 0.0595244 (0.00352631)
+Comm  time (%) = 0.910139 (0.0539179)
+Outpt time (%) = 0.000552599 (3.27368e-05)
+Other time (%) = 1686.76 (99.9261)
+
+Nlocal:    7.5 ave 93 max 0 min
+Histogram: 32 4 0 2 0 0 0 0 1 1
+Nghost:    4.425 ave 49 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 2 1
+Neighs:    1.95 ave 33 max 0 min
+Histogram: 36 0 1 1 0 0 0 0 1 1
+
+Total # of neighbors = 78
+Ave neighs/atom = 0.26
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 08:29:23 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 4568688      300     0.01925143              0 
+ 4692166      300    0.020446257      1679.5117 
+Loop time of 1679.51 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 08:57:23 2022
+
+
+Pair  time (%) = 0.277913 (0.0165472)
+Neigh time (%) = 0.059495 (0.0035424)
+Comm  time (%) = 0.964744 (0.057442)
+Outpt time (%) = 0.000883715 (5.26174e-05)
+Other time (%) = 1678.21 (99.9224)
+
+Nlocal:    7.5 ave 93 max 0 min
+Histogram: 33 2 1 1 1 0 0 0 1 1
+Nghost:    4.375 ave 47 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 0 3
+Neighs:    1.75 ave 31 max 0 min
+Histogram: 36 0 2 0 0 0 0 1 0 1
+
+Total # of neighbors = 70
+Ave neighs/atom = 0.233333
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 08:57:23 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 4692166      300    0.020446257              0 
+ 4815644      300    0.021076633      1694.8607 
+Loop time of 1694.86 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 09:25:38 2022
+
+
+Pair  time (%) = 0.277542 (0.0163755)
+Neigh time (%) = 0.0607404 (0.0035838)
+Comm  time (%) = 1.06154 (0.062633)
+Outpt time (%) = 0.000584072 (3.44614e-05)
+Other time (%) = 1693.46 (99.9174)
+
+Nlocal:    7.5 ave 92 max 0 min
+Histogram: 33 3 0 1 1 0 0 0 1 1
+Nghost:    4.175 ave 44 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 0 3
+Neighs:    1.6 ave 27 max 0 min
+Histogram: 36 1 1 0 0 0 0 0 1 1
+
+Total # of neighbors = 64
+Ave neighs/atom = 0.213333
+Neighbor list builds = 336
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 09:25:38 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 4815644      300    0.021076633              0 
+ 4939122      300    0.021836866      1694.5332 
+Loop time of 1694.53 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 09:53:52 2022
+
+
+Pair  time (%) = 0.276467 (0.0163152)
+Neigh time (%) = 0.0598795 (0.00353368)
+Comm  time (%) = 0.99762 (0.0588729)
+Outpt time (%) = 0.000581056 (3.429e-05)
+Other time (%) = 1693.2 (99.9212)
+
+Nlocal:    7.5 ave 90 max 0 min
+Histogram: 32 3 1 1 1 0 0 0 0 2
+Nghost:    4.075 ave 46 max 0 min
+Histogram: 36 0 0 0 0 0 1 0 1 2
+Neighs:    1.6 ave 25 max 0 min
+Histogram: 36 1 0 1 0 0 0 0 0 2
+
+Total # of neighbors = 64
+Ave neighs/atom = 0.213333
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 09:53:52 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 4939122      300    0.021836866              0 
+ 5062600      300    0.022674826      1698.9679 
+Loop time of 1698.97 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 10:22:11 2022
+
+
+Pair  time (%) = 0.276495 (0.0162743)
+Neigh time (%) = 0.0599112 (0.00352633)
+Comm  time (%) = 0.929063 (0.0546839)
+Outpt time (%) = 0.000841482 (4.9529e-05)
+Other time (%) = 1697.7 (99.9255)
+
+Nlocal:    7.5 ave 89 max 0 min
+Histogram: 32 3 1 0 2 0 0 0 0 2
+Nghost:    4.2 ave 46 max 0 min
+Histogram: 36 0 0 0 0 0 1 0 1 2
+Neighs:    1.775 ave 28 max 0 min
+Histogram: 36 0 1 1 0 0 0 0 1 1
+
+Total # of neighbors = 71
+Ave neighs/atom = 0.236667
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 10:22:11 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 5062600      300    0.022674826              0 
+ 5186078      300    0.023336105      1682.3854 
+Loop time of 1682.39 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 10:50:14 2022
+
+
+Pair  time (%) = 0.275516 (0.0163765)
+Neigh time (%) = 0.0599438 (0.00356302)
+Comm  time (%) = 1.04666 (0.0622127)
+Outpt time (%) = 0.000516992 (3.07297e-05)
+Other time (%) = 1681 (99.9178)
+
+Nlocal:    7.5 ave 88 max 0 min
+Histogram: 32 3 1 1 1 0 0 0 0 2
+Nghost:    3.975 ave 41 max 0 min
+Histogram: 36 0 0 0 0 0 1 0 0 3
+Neighs:    1.725 ave 28 max 0 min
+Histogram: 36 0 2 0 0 0 0 0 1 1
+
+Total # of neighbors = 69
+Ave neighs/atom = 0.23
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 10:50:14 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 5186078      300    0.023336105              0 
+ 5309556      300     0.02424989      1688.8694 
+Loop time of 1688.99 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 11:18:23 2022
+
+
+Pair  time (%) = 0.276342 (0.0163613)
+Neigh time (%) = 0.0599485 (0.00354936)
+Comm  time (%) = 0.970555 (0.0574635)
+Outpt time (%) = 0.000859934 (5.0914e-05)
+Other time (%) = 1687.69 (99.9226)
+
+Nlocal:    7.5 ave 87 max 0 min
+Histogram: 32 3 1 1 1 0 0 0 1 1
+Nghost:    3.925 ave 40 max 0 min
+Histogram: 34 2 0 0 0 0 1 0 0 3
+Neighs:    1.7 ave 26 max 0 min
+Histogram: 36 1 1 0 0 0 0 0 0 2
+
+Total # of neighbors = 68
+Ave neighs/atom = 0.226667
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 11:18:23 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 5309556      300     0.02424989              0 
+ 5433034      300    0.025803269       1682.095 
+Loop time of 1682.1 on 40 procs for 123478 steps with 300 atoms, finish time Thu Nov 24 11:46:25 2022
+
+
+Pair  time (%) = 0.275362 (0.0163702)
+Neigh time (%) = 0.0602265 (0.00358045)
+Comm  time (%) = 0.894829 (0.0531973)
+Outpt time (%) = 0.000574799 (3.41716e-05)
+Other time (%) = 1680.86 (99.9268)
+
+Nlocal:    7.5 ave 84 max 0 min
+Histogram: 32 2 2 0 2 0 0 0 0 2
+Nghost:    3.7 ave 40 max 0 min
+Histogram: 35 1 0 0 0 0 1 0 0 3
+Neighs:    1.55 ave 25 max 0 min
+Histogram: 36 1 1 0 0 0 0 0 0 2
+
+Total # of neighbors = 62
+Ave neighs/atom = 0.206667
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 11:46:25 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 5433034      300    0.025803269              0 
+ 5556512      299       0.027219      1694.6869 
+Loop time of 1694.71 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 12:14:40 2022
+
+
+Pair  time (%) = 0.273556 (0.0161418)
+Neigh time (%) = 0.0596916 (0.00352224)
+Comm  time (%) = 0.85053 (0.0501874)
+Outpt time (%) = 0.000950902 (5.61102e-05)
+Other time (%) = 1693.52 (99.9301)
+
+Nlocal:    7.475 ave 85 max 0 min
+Histogram: 32 1 3 1 1 0 0 0 0 2
+Nghost:    3.65 ave 40 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 0 3
+Neighs:    1.625 ave 28 max 0 min
+Histogram: 36 1 1 0 0 0 0 0 0 2
+
+Total # of neighbors = 65
+Ave neighs/atom = 0.217391
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 12:14:40 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 5556512      299       0.027219              0 
+ 5679990      299    0.027014045       1692.146 
+Loop time of 1692.15 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 12:42:52 2022
+
+
+Pair  time (%) = 0.273421 (0.0161583)
+Neigh time (%) = 0.0601344 (0.00355374)
+Comm  time (%) = 0.93414 (0.0552044)
+Outpt time (%) = 0.000620564 (3.66732e-05)
+Other time (%) = 1690.88 (99.925)
+
+Nlocal:    7.475 ave 86 max 0 min
+Histogram: 32 2 2 1 0 1 0 0 1 1
+Nghost:    3.7 ave 38 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 0 3
+Neighs:    1.7 ave 32 max 0 min
+Histogram: 37 1 0 0 0 0 0 1 0 1
+
+Total # of neighbors = 68
+Ave neighs/atom = 0.227425
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 12:42:52 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 5679990      299    0.027014045              0 
+ 5803468      299    0.027783288      1697.6194 
+Loop time of 1697.62 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 13:11:10 2022
+
+
+Pair  time (%) = 0.273672 (0.0161209)
+Neigh time (%) = 0.0602855 (0.00355118)
+Comm  time (%) = 0.919487 (0.0541633)
+Outpt time (%) = 0.000675263 (3.97771e-05)
+Other time (%) = 1696.37 (99.9261)
+
+Nlocal:    7.475 ave 85 max 0 min
+Histogram: 32 2 2 1 1 0 0 0 0 2
+Nghost:    3.45 ave 34 max 0 min
+Histogram: 36 0 0 0 0 0 0 0 1 3
+Neighs:    1.75 ave 35 max 0 min
+Histogram: 37 1 0 0 0 0 0 1 0 1
+
+Total # of neighbors = 70
+Ave neighs/atom = 0.234114
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 13:11:10 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 5803468      299    0.027783288              0 
+ 5926946      299    0.028706726      1751.7746 
+Loop time of 1751.77 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 13:40:22 2022
+
+
+Pair  time (%) = 0.272693 (0.0155667)
+Neigh time (%) = 0.0600674 (0.00342895)
+Comm  time (%) = 1.05769 (0.0603779)
+Outpt time (%) = 0.000852753 (4.86794e-05)
+Other time (%) = 1750.38 (99.9206)
+
+Nlocal:    7.475 ave 84 max 0 min
+Histogram: 32 2 2 0 2 0 0 0 0 2
+Nghost:    3.575 ave 39 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 2 1
+Neighs:    1.725 ave 35 max 0 min
+Histogram: 37 1 0 0 0 0 0 1 0 1
+
+Total # of neighbors = 69
+Ave neighs/atom = 0.230769
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 13:40:22 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 5926946      299    0.028706726              0 
+ 6050424      299    0.029673557      1727.2584 
+Loop time of 1727.26 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 14:09:09 2022
+
+
+Pair  time (%) = 0.272489 (0.0157758)
+Neigh time (%) = 0.0601218 (0.00348076)
+Comm  time (%) = 7.7631 (0.449446)
+Outpt time (%) = 0.000657752 (3.80807e-05)
+Other time (%) = 1719.16 (99.5313)
+
+Nlocal:    7.475 ave 84 max 0 min
+Histogram: 32 2 1 2 1 0 0 0 0 2
+Nghost:    3.45 ave 38 max 0 min
+Histogram: 36 0 0 0 0 0 0 2 1 1
+Neighs:    1.7 ave 35 max 0 min
+Histogram: 37 1 0 0 0 0 1 0 0 1
+
+Total # of neighbors = 68
+Ave neighs/atom = 0.227425
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 14:09:09 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 6050424      299    0.029673557              0 
+ 6173902      299    0.030767538      1689.3626 
+Loop time of 1689.36 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 14:37:19 2022
+
+
+Pair  time (%) = 0.272028 (0.0161024)
+Neigh time (%) = 0.0602055 (0.0035638)
+Comm  time (%) = 1.06941 (0.0633023)
+Outpt time (%) = 0.000954053 (5.64741e-05)
+Other time (%) = 1687.96 (99.917)
+
+Nlocal:    7.475 ave 83 max 0 min
+Histogram: 32 1 3 2 0 0 0 0 0 2
+Nghost:    3.7 ave 37 max 0 min
+Histogram: 36 0 0 0 0 0 0 0 0 4
+Neighs:    1.675 ave 33 max 0 min
+Histogram: 36 1 1 0 0 0 1 0 0 1
+
+Total # of neighbors = 67
+Ave neighs/atom = 0.22408
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 14:37:19 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 6173902      299    0.030767538              0 
+ 6297380      299     0.03129418      1712.3353 
+Loop time of 1712.34 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 15:05:51 2022
+
+
+Pair  time (%) = 0.269853 (0.0157594)
+Neigh time (%) = 0.0600908 (0.00350929)
+Comm  time (%) = 0.951958 (0.0555941)
+Outpt time (%) = 0.000667832 (3.90012e-05)
+Other time (%) = 1711.05 (99.9251)
+
+Nlocal:    7.475 ave 80 max 0 min
+Histogram: 32 2 2 1 0 0 1 0 0 2
+Nghost:    3.55 ave 36 max 0 min
+Histogram: 36 0 0 0 0 0 0 0 2 2
+Neighs:    1.625 ave 33 max 0 min
+Histogram: 37 0 1 0 0 0 1 0 0 1
+
+Total # of neighbors = 65
+Ave neighs/atom = 0.217391
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 15:05:51 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 6297380      299     0.03129418              0 
+ 6420858      299    0.032154084      1748.2074 
+Loop time of 1748.21 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 15:34:59 2022
+
+
+Pair  time (%) = 0.27071 (0.015485)
+Neigh time (%) = 0.0598387 (0.00342286)
+Comm  time (%) = 0.896737 (0.0512946)
+Outpt time (%) = 0.000922392 (5.27621e-05)
+Other time (%) = 1746.98 (99.9297)
+
+Nlocal:    7.475 ave 81 max 0 min
+Histogram: 32 1 4 0 1 0 0 0 0 2
+Nghost:    3.725 ave 37 max 0 min
+Histogram: 35 1 0 0 0 0 0 1 0 3
+Neighs:    1.575 ave 32 max 0 min
+Histogram: 37 1 0 0 0 0 1 0 0 1
+
+Total # of neighbors = 63
+Ave neighs/atom = 0.210702
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 15:34:59 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 6420858      299    0.032154084              0 
+ 6544336      299    0.033000805      1756.9947 
+Loop time of 1757 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 16:04:16 2022
+
+
+Pair  time (%) = 0.269628 (0.015346)
+Neigh time (%) = 0.0600438 (0.00341742)
+Comm  time (%) = 1.07137 (0.0609771)
+Outpt time (%) = 0.000598183 (3.40458e-05)
+Other time (%) = 1755.59 (99.9202)
+
+Nlocal:    7.475 ave 79 max 0 min
+Histogram: 32 2 1 1 1 1 0 0 0 2
+Nghost:    3.525 ave 40 max 0 min
+Histogram: 36 0 0 0 0 0 0 2 1 1
+Neighs:    1.475 ave 27 max 0 min
+Histogram: 37 0 0 1 0 0 0 1 0 1
+
+Total # of neighbors = 59
+Ave neighs/atom = 0.197324
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 16:04:16 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 6544336      299    0.033000805              0 
+ 6667814      299    0.033908605      1732.6721 
+Loop time of 1732.67 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 16:33:09 2022
+
+
+Pair  time (%) = 0.26736 (0.0154305)
+Neigh time (%) = 0.0600839 (0.0034677)
+Comm  time (%) = 1.10733 (0.0639089)
+Outpt time (%) = 0.000885462 (5.11038e-05)
+Other time (%) = 1731.24 (99.9171)
+
+Nlocal:    7.475 ave 78 max 0 min
+Histogram: 32 1 3 1 0 0 1 0 0 2
+Nghost:    3.575 ave 37 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 1 2
+Neighs:    1.325 ave 21 max 0 min
+Histogram: 37 0 0 0 1 0 0 0 0 2
+
+Total # of neighbors = 53
+Ave neighs/atom = 0.177258
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 16:33:09 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 6667814      299    0.033908605              0 
+ 6791292      299    0.034837706      1690.3984 
+Loop time of 1690.4 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 17:01:20 2022
+
+
+Pair  time (%) = 0.266957 (0.0157926)
+Neigh time (%) = 0.0602671 (0.00356526)
+Comm  time (%) = 0.957742 (0.0566578)
+Outpt time (%) = 0.000514519 (3.04377e-05)
+Other time (%) = 1689.11 (99.924)
+
+Nlocal:    7.475 ave 75 max 0 min
+Histogram: 32 0 3 2 0 1 0 0 0 2
+Nghost:    3.45 ave 39 max 0 min
+Histogram: 36 0 0 0 0 0 0 2 0 2
+Neighs:    1.35 ave 21 max 0 min
+Histogram: 36 1 0 1 0 0 0 0 0 2
+
+Total # of neighbors = 54
+Ave neighs/atom = 0.180602
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 17:01:20 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 6791292      299    0.034837706              0 
+ 6914770      299    0.035776074       1692.505 
+Loop time of 1692.51 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 17:29:32 2022
+
+
+Pair  time (%) = 0.2685 (0.015864)
+Neigh time (%) = 0.0602572 (0.00356022)
+Comm  time (%) = 1.12728 (0.0666037)
+Outpt time (%) = 0.0132371 (0.000782099)
+Other time (%) = 1691.04 (99.9132)
+
+Nlocal:    7.475 ave 75 max 0 min
+Histogram: 32 0 3 2 0 1 0 0 0 2
+Nghost:    3.425 ave 38 max 0 min
+Histogram: 36 0 0 0 0 0 0 2 0 2
+Neighs:    1.3 ave 20 max 0 min
+Histogram: 35 2 0 0 1 0 0 0 0 2
+
+Total # of neighbors = 52
+Ave neighs/atom = 0.173913
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 17:29:32 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 6914770      299    0.035776074              0 
+ 7038248      299    0.037033595      1701.8751 
+Loop time of 1701.88 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 17:57:54 2022
+
+
+Pair  time (%) = 0.267337 (0.0157084)
+Neigh time (%) = 0.0601487 (0.00353426)
+Comm  time (%) = 1.05889 (0.062219)
+Outpt time (%) = 0.000864607 (5.08032e-05)
+Other time (%) = 1700.49 (99.9185)
+
+Nlocal:    7.475 ave 75 max 0 min
+Histogram: 32 1 2 1 1 0 1 0 0 2
+Nghost:    3.5 ave 40 max 0 min
+Histogram: 36 0 0 0 0 0 1 1 1 1
+Neighs:    1.25 ave 19 max 0 min
+Histogram: 35 2 0 0 1 0 0 0 0 2
+
+Total # of neighbors = 50
+Ave neighs/atom = 0.167224
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 17:57:54 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 7038248      299    0.037033595              0 
+ 7161726      299    0.037536146      1688.3878 
+Loop time of 1688.39 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 18:26:03 2022
+
+
+Pair  time (%) = 0.267406 (0.0158379)
+Neigh time (%) = 0.0602828 (0.00357044)
+Comm  time (%) = 1.03209 (0.0611288)
+Outpt time (%) = 0.00066122 (3.91628e-05)
+Other time (%) = 1687.03 (99.9194)
+
+Nlocal:    7.475 ave 75 max 0 min
+Histogram: 32 0 3 2 0 1 0 0 0 2
+Nghost:    3.7 ave 44 max 0 min
+Histogram: 36 0 0 0 0 0 1 2 0 1
+Neighs:    1.275 ave 20 max 0 min
+Histogram: 36 1 0 0 1 0 0 0 0 2
+
+Total # of neighbors = 51
+Ave neighs/atom = 0.170569
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 18:26:03 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 7161726      299    0.037536146              0 
+ 7285204      299    0.038579833      1691.1698 
+Loop time of 1691.17 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 18:54:14 2022
+
+
+Pair  time (%) = 0.265826 (0.0157185)
+Neigh time (%) = 0.0601438 (0.00355634)
+Comm  time (%) = 1.02966 (0.0608844)
+Outpt time (%) = 0.000883527 (5.22435e-05)
+Other time (%) = 1689.81 (99.9198)
+
+Nlocal:    7.475 ave 72 max 0 min
+Histogram: 32 0 3 0 2 1 0 0 0 2
+Nghost:    3.65 ave 40 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 1 2
+Neighs:    1.275 ave 20 max 0 min
+Histogram: 35 1 1 1 0 0 0 0 1 1
+
+Total # of neighbors = 51
+Ave neighs/atom = 0.170569
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 18:54:14 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 7285204      299    0.038579833              0 
+ 7408682      299    0.039435804      1693.8515 
+Loop time of 1693.85 on 40 procs for 123478 steps with 299 atoms, finish time Thu Nov 24 19:22:28 2022
+
+
+Pair  time (%) = 0.266639 (0.0157416)
+Neigh time (%) = 0.0607538 (0.00358672)
+Comm  time (%) = 1.0115 (0.059716)
+Outpt time (%) = 0.000599313 (3.53817e-05)
+Other time (%) = 1692.51 (99.9209)
+
+Nlocal:    7.475 ave 71 max 0 min
+Histogram: 32 0 3 2 0 0 0 1 0 2
+Nghost:    3.55 ave 40 max 0 min
+Histogram: 36 0 0 0 0 0 1 1 0 2
+Neighs:    1.275 ave 17 max 0 min
+Histogram: 36 0 1 0 0 1 0 0 0 2
+
+Total # of neighbors = 51
+Ave neighs/atom = 0.170569
+Neighbor list builds = 332
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 19:22:28 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 7408682      299    0.039435804              0 
+ 7532160      298    0.040036082       1682.855 
+Loop time of 1682.85 on 40 procs for 123478 steps with 298 atoms, finish time Thu Nov 24 19:50:31 2022
+
+
+Pair  time (%) = 0.265159 (0.0157565)
+Neigh time (%) = 0.0607485 (0.00360985)
+Comm  time (%) = 0.823193 (0.0489165)
+Outpt time (%) = 0.000863556 (5.13149e-05)
+Other time (%) = 1681.71 (99.9317)
+
+Nlocal:    7.45 ave 71 max 0 min
+Histogram: 32 0 1 4 0 1 0 0 0 2
+Nghost:    3.55 ave 40 max 0 min
+Histogram: 36 0 0 0 0 0 1 1 0 2
+Neighs:    1.225 ave 18 max 0 min
+Histogram: 34 2 1 1 0 0 0 0 1 1
+
+Total # of neighbors = 49
+Ave neighs/atom = 0.16443
+Neighbor list builds = 332
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 19:50:31 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 7532160      298    0.040036082              0 
+ 7655638      298      0.0406359       1745.446 
+Loop time of 1745.45 on 40 procs for 123478 steps with 298 atoms, finish time Thu Nov 24 20:19:36 2022
+
+
+Pair  time (%) = 0.264317 (0.0151433)
+Neigh time (%) = 0.0604484 (0.00346321)
+Comm  time (%) = 0.959515 (0.0549725)
+Outpt time (%) = 0.000620256 (3.55357e-05)
+Other time (%) = 1744.16 (99.9264)
+
+Nlocal:    7.45 ave 71 max 0 min
+Histogram: 32 2 1 1 1 0 0 1 0 2
+Nghost:    3.675 ave 39 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 1 2
+Neighs:    1.3 ave 21 max 0 min
+Histogram: 36 1 0 0 1 0 0 1 0 1
+
+Total # of neighbors = 52
+Ave neighs/atom = 0.174497
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 20:19:37 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 7655638      298      0.0406359              0 
+ 7779116      298    0.041314859      1759.8211 
+Loop time of 1759.82 on 40 procs for 123478 steps with 298 atoms, finish time Thu Nov 24 20:48:56 2022
+
+
+Pair  time (%) = 0.265965 (0.0151132)
+Neigh time (%) = 0.0598698 (0.00340204)
+Comm  time (%) = 1.33578 (0.0759045)
+Outpt time (%) = 0.000885766 (5.03327e-05)
+Other time (%) = 1758.16 (99.9055)
+
+Nlocal:    7.45 ave 69 max 0 min
+Histogram: 32 0 2 2 1 1 0 0 0 2
+Nghost:    3.65 ave 38 max 0 min
+Histogram: 35 1 0 0 0 0 1 0 1 2
+Neighs:    1.225 ave 22 max 0 min
+Histogram: 36 1 0 0 1 1 0 0 0 1
+
+Total # of neighbors = 49
+Ave neighs/atom = 0.16443
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 20:48:56 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 7779116      298    0.041314859              0 
+ 7902594      298    0.042610605      1718.6035 
+Loop time of 1718.6 on 40 procs for 123478 steps with 298 atoms, finish time Thu Nov 24 21:17:35 2022
+
+
+Pair  time (%) = 0.265069 (0.0154235)
+Neigh time (%) = 0.0626548 (0.00364568)
+Comm  time (%) = 1.50851 (0.0877755)
+Outpt time (%) = 0.000683506 (3.9771e-05)
+Other time (%) = 1716.77 (99.8931)
+
+Nlocal:    7.45 ave 70 max 0 min
+Histogram: 32 0 3 1 1 0 0 1 0 2
+Nghost:    3.675 ave 39 max 0 min
+Histogram: 35 1 0 0 0 0 1 1 0 2
+Neighs:    1.325 ave 20 max 0 min
+Histogram: 35 2 0 0 0 0 1 1 0 1
+
+Total # of neighbors = 53
+Ave neighs/atom = 0.177852
+Neighbor list builds = 341
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 21:17:35 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 7902594      298    0.042610605              0 
+ 8026072      297    0.043356878      1710.0836 
+Loop time of 1710.08 on 40 procs for 123478 steps with 297 atoms, finish time Thu Nov 24 21:46:05 2022
+
+
+Pair  time (%) = 0.265566 (0.0155294)
+Neigh time (%) = 0.0609609 (0.00356479)
+Comm  time (%) = 1.13578 (0.0664165)
+Outpt time (%) = 0.000519031 (3.03512e-05)
+Other time (%) = 1708.62 (99.9145)
+
+Nlocal:    7.425 ave 68 max 0 min
+Histogram: 32 0 2 1 2 0 1 0 0 2
+Nghost:    3.6 ave 38 max 0 min
+Histogram: 36 0 0 0 0 0 1 0 1 2
+Neighs:    1.425 ave 21 max 0 min
+Histogram: 35 2 0 0 0 1 0 1 0 1
+
+Total # of neighbors = 57
+Ave neighs/atom = 0.191919
+Neighbor list builds = 334
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 21:46:05 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 8026072      297    0.043356878              0 
+ 8149550      296    0.043516472      1693.3472 
+Loop time of 1693.35 on 40 procs for 123478 steps with 296 atoms, finish time Thu Nov 24 22:14:19 2022
+
+
+Pair  time (%) = 0.265198 (0.0156611)
+Neigh time (%) = 0.060471 (0.00357109)
+Comm  time (%) = 1.00516 (0.0593596)
+Outpt time (%) = 0.000758151 (4.47723e-05)
+Other time (%) = 1692.02 (99.9214)
+
+Nlocal:    7.4 ave 68 max 0 min
+Histogram: 32 1 2 0 1 1 1 0 0 2
+Nghost:    3.8 ave 41 max 0 min
+Histogram: 36 0 0 0 0 0 1 1 0 2
+Neighs:    1.5 ave 22 max 0 min
+Histogram: 35 1 1 0 0 1 1 0 0 1
+
+Total # of neighbors = 60
+Ave neighs/atom = 0.202703
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 22:14:19 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 8149550      296    0.043516472              0 
+ 8273028      296    0.044095704      1694.5566 
+Loop time of 1694.56 on 40 procs for 123478 steps with 296 atoms, finish time Thu Nov 24 22:42:33 2022
+
+
+Pair  time (%) = 0.266272 (0.0157134)
+Neigh time (%) = 0.0602775 (0.00355712)
+Comm  time (%) = 0.889619 (0.0524986)
+Outpt time (%) = 0.000615098 (3.62984e-05)
+Other time (%) = 1693.34 (99.9282)
+
+Nlocal:    7.4 ave 68 max 0 min
+Histogram: 32 1 0 2 2 0 1 0 0 2
+Nghost:    3.45 ave 39 max 0 min
+Histogram: 36 0 0 0 0 0 1 1 0 2
+Neighs:    1.4 ave 20 max 0 min
+Histogram: 34 1 1 1 1 0 0 1 0 1
+
+Total # of neighbors = 56
+Ave neighs/atom = 0.189189
+Neighbor list builds = 330
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 22:42:33 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 8273028      296    0.044095704              0 
+ 8396506      296    0.044826796      1691.2494 
+Loop time of 1691.25 on 40 procs for 123478 steps with 296 atoms, finish time Thu Nov 24 23:10:45 2022
+
+
+Pair  time (%) = 0.268188 (0.0158574)
+Neigh time (%) = 0.0618892 (0.00365938)
+Comm  time (%) = 0.991283 (0.0586125)
+Outpt time (%) = 0.000992136 (5.86629e-05)
+Other time (%) = 1689.93 (99.9218)
+
+Nlocal:    7.4 ave 68 max 0 min
+Histogram: 32 1 0 3 1 0 1 0 0 2
+Nghost:    3.6 ave 42 max 0 min
+Histogram: 36 0 0 0 0 0 2 0 1 1
+Neighs:    1.35 ave 18 max 0 min
+Histogram: 33 3 1 0 0 0 1 0 1 1
+
+Total # of neighbors = 54
+Ave neighs/atom = 0.182432
+Neighbor list builds = 335
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 23:10:45 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 8396506      296    0.044826796              0 
+ 8519984      296    0.045277035      1708.9217 
+Loop time of 1708.92 on 40 procs for 123478 steps with 296 atoms, finish time Thu Nov 24 23:39:14 2022
+
+
+Pair  time (%) = 0.267004 (0.0156241)
+Neigh time (%) = 0.0616983 (0.00361036)
+Comm  time (%) = 1.13519 (0.0664271)
+Outpt time (%) = 0.000721068 (4.21943e-05)
+Other time (%) = 1707.46 (99.9143)
+
+Nlocal:    7.4 ave 68 max 0 min
+Histogram: 32 2 1 1 0 1 0 0 1 2
+Nghost:    3.45 ave 42 max 0 min
+Histogram: 36 0 0 0 0 1 1 0 1 1
+Neighs:    1.325 ave 17 max 0 min
+Histogram: 35 1 1 0 0 0 0 1 0 2
+
+Total # of neighbors = 53
+Ave neighs/atom = 0.179054
+Neighbor list builds = 335
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Thu Nov 24 23:39:14 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 8519984      296    0.045277035              0 
+ 8643462      295    0.045936389      1703.1393 
+Loop time of 1703.14 on 40 procs for 123478 steps with 295 atoms, finish time Fri Nov 25 00:07:37 2022
+
+
+Pair  time (%) = 0.267842 (0.0157264)
+Neigh time (%) = 0.0615021 (0.0036111)
+Comm  time (%) = 1.0734 (0.0630245)
+Outpt time (%) = 0.000953122 (5.59627e-05)
+Other time (%) = 1701.74 (99.9176)
+
+Nlocal:    7.375 ave 68 max 0 min
+Histogram: 32 0 2 2 0 1 1 0 0 2
+Nghost:    3.575 ave 40 max 0 min
+Histogram: 34 2 0 0 0 0 2 0 1 1
+Neighs:    1.35 ave 18 max 0 min
+Histogram: 32 5 0 0 0 1 0 0 1 1
+
+Total # of neighbors = 54
+Ave neighs/atom = 0.183051
+Neighbor list builds = 335
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 00:07:37 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 8643462      295    0.045936389              0 
+ 8766940      295    0.046717048      1696.7415 
+Loop time of 1696.74 on 40 procs for 123478 steps with 295 atoms, finish time Fri Nov 25 00:35:54 2022
+
+
+Pair  time (%) = 0.266588 (0.0157117)
+Neigh time (%) = 0.0619834 (0.00365309)
+Comm  time (%) = 1.00991 (0.0595206)
+Outpt time (%) = 0.000698107 (4.1144e-05)
+Other time (%) = 1695.4 (99.9211)
+
+Nlocal:    7.375 ave 67 max 0 min
+Histogram: 32 1 0 3 0 2 0 0 0 2
+Nghost:    3.55 ave 42 max 0 min
+Histogram: 36 0 0 0 0 0 1 1 1 1
+Neighs:    1.3 ave 17 max 0 min
+Histogram: 34 2 1 0 0 1 0 0 1 1
+
+Total # of neighbors = 52
+Ave neighs/atom = 0.176271
+Neighbor list builds = 336
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 00:35:54 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 8766940      295    0.046717048              0 
+ 8890418      295    0.047027604      1707.7906 
+Loop time of 1707.79 on 40 procs for 123478 steps with 295 atoms, finish time Fri Nov 25 01:04:22 2022
+
+
+Pair  time (%) = 0.264992 (0.0155167)
+Neigh time (%) = 0.0618872 (0.00362382)
+Comm  time (%) = 1.07878 (0.0631683)
+Outpt time (%) = 0.000650208 (3.8073e-05)
+Other time (%) = 1706.38 (99.9177)
+
+Nlocal:    7.375 ave 68 max 0 min
+Histogram: 32 1 2 0 1 1 0 1 0 2
+Nghost:    3.7 ave 44 max 0 min
+Histogram: 36 0 0 0 0 0 1 2 0 1
+Neighs:    1.075 ave 17 max 0 min
+Histogram: 37 0 0 0 0 1 0 0 1 1
+
+Total # of neighbors = 43
+Ave neighs/atom = 0.145763
+Neighbor list builds = 337
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 01:04:22 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 8890418      295    0.047027604              0 
+ 9013896      295     0.04762227      1697.6267 
+Loop time of 1697.63 on 40 procs for 123478 steps with 295 atoms, finish time Fri Nov 25 01:32:39 2022
+
+
+Pair  time (%) = 0.264408 (0.0155752)
+Neigh time (%) = 0.0622361 (0.00366607)
+Comm  time (%) = 1.07747 (0.0634692)
+Outpt time (%) = 0.000845093 (4.97808e-05)
+Other time (%) = 1696.22 (99.9172)
+
+Nlocal:    7.375 ave 66 max 0 min
+Histogram: 32 0 1 1 3 0 1 0 0 2
+Nghost:    3.7 ave 42 max 0 min
+Histogram: 36 0 0 0 0 0 0 2 1 1
+Neighs:    1.05 ave 16 max 0 min
+Histogram: 36 1 0 0 0 0 1 1 0 1
+
+Total # of neighbors = 42
+Ave neighs/atom = 0.142373
+Neighbor list builds = 339
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 01:32:39 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 9013896      295     0.04762227              0 
+ 9137374      295    0.048118401      1695.2669 
+Loop time of 1695.27 on 40 procs for 123478 steps with 295 atoms, finish time Fri Nov 25 02:00:55 2022
+
+
+Pair  time (%) = 0.265343 (0.015652)
+Neigh time (%) = 0.0628401 (0.00370679)
+Comm  time (%) = 1.21283 (0.0715424)
+Outpt time (%) = 0.000598657 (3.53134e-05)
+Other time (%) = 1693.73 (99.9091)
+
+Nlocal:    7.375 ave 65 max 0 min
+Histogram: 32 0 2 0 3 0 1 0 0 2
+Nghost:    3.675 ave 41 max 0 min
+Histogram: 36 0 0 0 0 0 0 2 1 1
+Neighs:    1.175 ave 16 max 0 min
+Histogram: 34 3 0 0 0 0 1 1 0 1
+
+Total # of neighbors = 47
+Ave neighs/atom = 0.159322
+Neighbor list builds = 342
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 02:00:55 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 9137374      295    0.048118401              0 
+ 9260852      295    0.048639373      1690.6308 
+Loop time of 1690.63 on 40 procs for 123478 steps with 295 atoms, finish time Fri Nov 25 02:29:05 2022
+
+
+Pair  time (%) = 0.26583 (0.0157237)
+Neigh time (%) = 0.0632436 (0.00374083)
+Comm  time (%) = 0.995971 (0.0589112)
+Outpt time (%) = 0.000936787 (5.54105e-05)
+Other time (%) = 1689.3 (99.9216)
+
+Nlocal:    7.375 ave 66 max 0 min
+Histogram: 32 0 1 2 2 0 1 0 0 2
+Nghost:    3.7 ave 40 max 0 min
+Histogram: 34 2 0 0 0 0 0 2 1 1
+Neighs:    1.075 ave 16 max 0 min
+Histogram: 35 1 0 0 1 1 1 0 0 1
+
+Total # of neighbors = 43
+Ave neighs/atom = 0.145763
+Neighbor list builds = 345
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 02:29:05 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 9260852      295    0.048639373              0 
+ 9384330      295    0.049418001      1700.8551 
+Loop time of 1700.86 on 40 procs for 123478 steps with 295 atoms, finish time Fri Nov 25 02:57:26 2022
+
+
+Pair  time (%) = 0.265874 (0.0156318)
+Neigh time (%) = 0.0630592 (0.0037075)
+Comm  time (%) = 1.10082 (0.0647217)
+Outpt time (%) = 0.000763359 (4.48809e-05)
+Other time (%) = 1699.43 (99.9159)
+
+Nlocal:    7.375 ave 66 max 0 min
+Histogram: 32 0 2 1 1 1 1 0 0 2
+Nghost:    3.45 ave 39 max 0 min
+Histogram: 36 0 0 0 0 0 0 2 1 1
+Neighs:    1 ave 16 max 0 min
+Histogram: 35 2 0 0 0 2 0 0 0 1
+
+Total # of neighbors = 40
+Ave neighs/atom = 0.135593
+Neighbor list builds = 344
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 02:57:26 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 9384330      295    0.049418001              0 
+ 9507808      295    0.050151657      1692.8966 
+Loop time of 1692.9 on 40 procs for 123478 steps with 295 atoms, finish time Fri Nov 25 03:25:39 2022
+
+
+Pair  time (%) = 0.266801 (0.01576)
+Neigh time (%) = 0.0628563 (0.00371294)
+Comm  time (%) = 1.22674 (0.0724637)
+Outpt time (%) = 0.000880657 (5.20207e-05)
+Other time (%) = 1691.34 (99.908)
+
+Nlocal:    7.375 ave 65 max 0 min
+Histogram: 32 0 0 3 1 2 0 0 0 2
+Nghost:    3.25 ave 36 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 1 2
+Neighs:    1.025 ave 15 max 0 min
+Histogram: 35 0 1 0 2 0 1 0 0 1
+
+Total # of neighbors = 41
+Ave neighs/atom = 0.138983
+Neighbor list builds = 343
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 03:25:39 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 9507808      295    0.050151657              0 
+ 9631286      295    0.050896144      1692.2841 
+Loop time of 1692.28 on 40 procs for 123478 steps with 295 atoms, finish time Fri Nov 25 03:53:52 2022
+
+
+Pair  time (%) = 0.266339 (0.0157384)
+Neigh time (%) = 0.0634288 (0.00374812)
+Comm  time (%) = 1.19673 (0.0707168)
+Outpt time (%) = 0.000536057 (3.16765e-05)
+Other time (%) = 1690.76 (99.9098)
+
+Nlocal:    7.375 ave 65 max 0 min
+Histogram: 32 0 1 1 2 2 0 0 0 2
+Nghost:    3.225 ave 35 max 0 min
+Histogram: 36 0 0 0 0 0 0 1 2 1
+Neighs:    1 ave 15 max 0 min
+Histogram: 35 0 2 0 1 0 1 0 0 1
+
+Total # of neighbors = 40
+Ave neighs/atom = 0.135593
+Neighbor list builds = 344
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 03:53:52 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 9631286      295    0.050896144              0 
+ 9754764      295    0.051639281      1684.2145 
+Loop time of 1684.21 on 40 procs for 123478 steps with 295 atoms, finish time Fri Nov 25 04:21:56 2022
+
+
+Pair  time (%) = 0.265661 (0.0157736)
+Neigh time (%) = 0.063423 (0.00376573)
+Comm  time (%) = 1.16783 (0.0693395)
+Outpt time (%) = 0.00084315 (5.00619e-05)
+Other time (%) = 1682.72 (99.9111)
+
+Nlocal:    7.375 ave 64 max 0 min
+Histogram: 32 0 2 0 1 2 1 0 0 2
+Nghost:    3.15 ave 38 max 0 min
+Histogram: 36 0 0 0 0 0 1 2 0 1
+Neighs:    0.85 ave 13 max 0 min
+Histogram: 35 1 1 0 0 1 1 0 0 1
+
+Total # of neighbors = 34
+Ave neighs/atom = 0.115254
+Neighbor list builds = 344
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 04:21:56 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 9754764      295    0.051639281              0 
+ 9878242      295    0.052127065      1704.8229 
+Loop time of 1705.12 on 40 procs for 123478 steps with 295 atoms, finish time Fri Nov 25 04:50:21 2022
+
+
+Pair  time (%) = 0.267772 (0.015704)
+Neigh time (%) = 0.062714 (0.00367798)
+Comm  time (%) = 1.05751 (0.0620197)
+Outpt time (%) = 0.000658194 (3.8601e-05)
+Other time (%) = 1703.73 (99.9186)
+
+Nlocal:    7.375 ave 63 max 0 min
+Histogram: 32 0 2 0 2 1 1 0 0 2
+Nghost:    3.35 ave 36 max 0 min
+Histogram: 34 2 0 0 0 0 0 2 1 1
+Neighs:    1.05 ave 14 max 0 min
+Histogram: 35 1 0 1 0 1 0 0 1 1
+
+Total # of neighbors = 42
+Ave neighs/atom = 0.142373
+Neighbor list builds = 341
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 04:50:21 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+ 9878242      295    0.052127065              0 
+10001720      295     0.05299593      1695.8445 
+Loop time of 1695.85 on 40 procs for 123478 steps with 295 atoms, finish time Fri Nov 25 05:18:37 2022
+
+
+Pair  time (%) = 0.267287 (0.0157613)
+Neigh time (%) = 0.0632286 (0.00372844)
+Comm  time (%) = 0.996674 (0.0587715)
+Outpt time (%) = 0.000652243 (3.84612e-05)
+Other time (%) = 1694.52 (99.9217)
+
+Nlocal:    7.375 ave 62 max 0 min
+Histogram: 32 0 0 2 1 3 0 0 0 2
+Nghost:    3.275 ave 32 max 0 min
+Histogram: 35 1 0 0 0 0 0 0 2 2
+Neighs:    1.175 ave 13 max 0 min
+Histogram: 33 1 1 1 1 0 2 0 0 1
+
+Total # of neighbors = 47
+Ave neighs/atom = 0.159322
+Neighbor list builds = 344
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 05:18:37 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+10001720      295     0.05299593              0 
+10125198      294    0.052954502      1694.1397 
+Loop time of 1694.14 on 40 procs for 123478 steps with 294 atoms, finish time Fri Nov 25 05:46:51 2022
+
+
+Pair  time (%) = 0.266152 (0.0157102)
+Neigh time (%) = 0.0626048 (0.00369537)
+Comm  time (%) = 1.13923 (0.0672452)
+Outpt time (%) = 0.000893356 (5.27322e-05)
+Other time (%) = 1692.67 (99.9133)
+
+Nlocal:    7.35 ave 62 max 0 min
+Histogram: 32 0 1 2 1 0 2 0 0 2
+Nghost:    3.35 ave 34 max 0 min
+Histogram: 35 1 0 0 0 0 0 0 3 1
+Neighs:    1.05 ave 13 max 0 min
+Histogram: 34 2 0 1 0 0 1 1 0 1
+
+Total # of neighbors = 42
+Ave neighs/atom = 0.142857
+Neighbor list builds = 341
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 05:46:52 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+10125198      294    0.052954502              0 
+10248676      294    0.053596845       1694.867 
+Loop time of 1694.87 on 40 procs for 123478 steps with 294 atoms, finish time Fri Nov 25 06:15:06 2022
+
+
+Pair  time (%) = 0.265684 (0.0156758)
+Neigh time (%) = 0.0623337 (0.00367779)
+Comm  time (%) = 1.02804 (0.0606562)
+Outpt time (%) = 0.000559638 (3.30195e-05)
+Other time (%) = 1693.51 (99.92)
+
+Nlocal:    7.35 ave 62 max 0 min
+Histogram: 32 0 0 1 2 3 0 0 0 2
+Nghost:    3 ave 31 max 0 min
+Histogram: 35 1 0 0 0 0 0 0 2 2
+Neighs:    0.9 ave 12 max 0 min
+Histogram: 33 2 2 0 1 0 1 0 0 1
+
+Total # of neighbors = 36
+Ave neighs/atom = 0.122449
+Neighbor list builds = 339
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 06:15:07 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+10248676      294    0.053596845              0 
+10372154      294    0.054379717       1687.734 
+Loop time of 1687.73 on 40 procs for 123478 steps with 294 atoms, finish time Fri Nov 25 06:43:14 2022
+
+
+Pair  time (%) = 0.267016 (0.015821)
+Neigh time (%) = 0.0623845 (0.00369635)
+Comm  time (%) = 1.07447 (0.0636634)
+Outpt time (%) = 0.000943032 (5.58757e-05)
+Other time (%) = 1686.33 (99.9168)
+
+Nlocal:    7.35 ave 62 max 0 min
+Histogram: 32 0 0 2 1 3 0 0 0 2
+Nghost:    3.175 ave 32 max 0 min
+Histogram: 35 1 0 0 0 0 0 1 0 3
+Neighs:    1.225 ave 18 max 0 min
+Histogram: 33 3 1 0 1 1 0 0 0 1
+
+Total # of neighbors = 49
+Ave neighs/atom = 0.166667
+Neighbor list builds = 339
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 06:43:14 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+10372154      294    0.054379717              0 
+10495632      294    0.054494739       1693.178 
+Loop time of 1693.18 on 40 procs for 123478 steps with 294 atoms, finish time Fri Nov 25 07:11:28 2022
+
+
+Pair  time (%) = 0.265849 (0.0157012)
+Neigh time (%) = 0.0680374 (0.00401833)
+Comm  time (%) = 1.33544 (0.0788717)
+Outpt time (%) = 0.000553682 (3.27008e-05)
+Other time (%) = 1691.51 (99.9014)
+
+Nlocal:    7.35 ave 64 max 0 min
+Histogram: 32 0 1 2 1 1 0 1 1 1
+Nghost:    2.75 ave 31 max 0 min
+Histogram: 36 0 0 0 0 0 1 1 0 2
+Neighs:    1.075 ave 19 max 0 min
+Histogram: 35 0 2 1 0 1 0 0 0 1
+
+Total # of neighbors = 43
+Ave neighs/atom = 0.146259
+Neighbor list builds = 371
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 07:11:28 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+10495632      294    0.054494739              0 
+10619110      293    0.055125586      1689.4649 
+Loop time of 1689.47 on 40 procs for 123478 steps with 293 atoms, finish time Fri Nov 25 07:39:37 2022
+
+
+Pair  time (%) = 0.26767 (0.0158435)
+Neigh time (%) = 0.0787852 (0.00466332)
+Comm  time (%) = 1.69623 (0.1004)
+Outpt time (%) = 0.000870553 (5.15283e-05)
+Other time (%) = 1687.42 (99.879)
+
+Nlocal:    7.325 ave 64 max 0 min
+Histogram: 32 0 1 2 1 1 0 1 1 1
+Nghost:    3.125 ave 33 max 0 min
+Histogram: 34 2 0 0 0 0 1 2 0 1
+Neighs:    1.175 ave 21 max 0 min
+Histogram: 35 1 2 1 0 0 0 0 0 1
+
+Total # of neighbors = 47
+Ave neighs/atom = 0.16041
+Neighbor list builds = 429
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 07:39:37 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+10619110      293    0.055125586              0 
+10742588      291    0.055618212      1694.1372 
+Loop time of 1694.14 on 40 procs for 123478 steps with 291 atoms, finish time Fri Nov 25 08:07:51 2022
+
+
+Pair  time (%) = 0.26727 (0.0157762)
+Neigh time (%) = 0.0623983 (0.00368319)
+Comm  time (%) = 1.37396 (0.0811009)
+Outpt time (%) = 0.000609675 (3.59873e-05)
+Other time (%) = 1692.43 (99.8994)
+
+Nlocal:    7.275 ave 63 max 0 min
+Histogram: 32 0 0 2 2 1 1 0 1 1
+Nghost:    2.75 ave 30 max 0 min
+Histogram: 35 1 0 0 0 0 1 0 1 2
+Neighs:    1.05 ave 17 max 0 min
+Histogram: 34 1 2 0 2 0 0 0 0 1
+
+Total # of neighbors = 42
+Ave neighs/atom = 0.14433
+Neighbor list builds = 340
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 08:07:51 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+10742588      291    0.055618212              0 
+10866066      291    0.056511925      1707.1989 
+Loop time of 1707.2 on 40 procs for 123478 steps with 291 atoms, finish time Fri Nov 25 08:36:19 2022
+
+
+Pair  time (%) = 0.2715 (0.0159032)
+Neigh time (%) = 0.0625353 (0.00366304)
+Comm  time (%) = 1.11647 (0.0653977)
+Outpt time (%) = 0.000575749 (3.37248e-05)
+Other time (%) = 1705.75 (99.915)
+
+Nlocal:    7.275 ave 64 max 0 min
+Histogram: 32 0 1 2 1 1 1 0 1 1
+Nghost:    2.625 ave 27 max 0 min
+Histogram: 36 0 0 0 0 0 0 0 2 2
+Neighs:    1.075 ave 13 max 0 min
+Histogram: 34 0 1 2 0 0 2 0 0 1
+
+Total # of neighbors = 43
+Ave neighs/atom = 0.147766
+Neighbor list builds = 342
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 08:36:19 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+10866066      291    0.056511925              0 
+10989544      289    0.057768355      1696.7248 
+Loop time of 1696.72 on 40 procs for 123478 steps with 289 atoms, finish time Fri Nov 25 09:04:35 2022
+
+
+Pair  time (%) = 0.268376 (0.0158173)
+Neigh time (%) = 0.0656173 (0.00386729)
+Comm  time (%) = 1.20948 (0.0712833)
+Outpt time (%) = 0.000998992 (5.88776e-05)
+Other time (%) = 1695.18 (99.909)
+
+Nlocal:    7.225 ave 64 max 0 min
+Histogram: 32 0 1 1 2 1 1 0 1 1
+Nghost:    2.85 ave 27 max 0 min
+Histogram: 33 3 0 0 0 0 0 1 1 2
+Neighs:    0.775 ave 10 max 0 min
+Histogram: 33 0 1 3 0 2 0 0 0 1
+
+Total # of neighbors = 31
+Ave neighs/atom = 0.107266
+Neighbor list builds = 357
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 09:04:36 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+10989544      289    0.057768355              0 
+11113022      288    0.058442887       1695.436 
+Loop time of 1695.44 on 40 procs for 123478 steps with 288 atoms, finish time Fri Nov 25 09:32:51 2022
+
+
+Pair  time (%) = 0.266588 (0.0157239)
+Neigh time (%) = 0.0626855 (0.00369731)
+Comm  time (%) = 1.06288 (0.0626908)
+Outpt time (%) = 0.000592996 (3.4976e-05)
+Other time (%) = 1694.04 (99.9179)
+
+Nlocal:    7.2 ave 62 max 0 min
+Histogram: 32 1 1 1 1 0 0 2 1 1
+Nghost:    2.725 ave 27 max 0 min
+Histogram: 35 1 0 0 0 0 0 0 1 3
+Neighs:    0.925 ave 13 max 0 min
+Histogram: 34 1 0 3 0 1 0 0 0 1
+
+Total # of neighbors = 37
+Ave neighs/atom = 0.128472
+Neighbor list builds = 341
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 09:32:51 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+11113022      288    0.058442887              0 
+11236500      287    0.058628951       1694.328 
+Loop time of 1694.33 on 40 procs for 123478 steps with 287 atoms, finish time Fri Nov 25 10:01:05 2022
+
+
+Pair  time (%) = 0.267511 (0.0157886)
+Neigh time (%) = 0.0631696 (0.0037283)
+Comm  time (%) = 1.06918 (0.0631037)
+Outpt time (%) = 0.023441 (0.0013835)
+Other time (%) = 1692.9 (99.916)
+
+Nlocal:    7.175 ave 60 max 0 min
+Histogram: 32 0 0 1 2 3 0 0 0 2
+Nghost:    2.9 ave 26 max 0 min
+Histogram: 33 2 1 0 0 0 0 0 1 3
+Neighs:    1 ave 12 max 0 min
+Histogram: 33 2 1 0 1 1 1 0 0 1
+
+Total # of neighbors = 40
+Ave neighs/atom = 0.139373
+Neighbor list builds = 343
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 10:01:06 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+11236500      287    0.058628951              0 
+11359978      286    0.059089888      1693.1013 
+Loop time of 1693.1 on 40 procs for 123478 steps with 286 atoms, finish time Fri Nov 25 10:29:19 2022
+
+
+Pair  time (%) = 0.266358 (0.015732)
+Neigh time (%) = 0.0634735 (0.00374895)
+Comm  time (%) = 1.01269 (0.0598128)
+Outpt time (%) = 0.000544506 (3.21603e-05)
+Other time (%) = 1691.76 (99.9207)
+
+Nlocal:    7.15 ave 59 max 0 min
+Histogram: 32 0 2 1 1 0 0 1 2 1
+Nghost:    2.625 ave 27 max 0 min
+Histogram: 35 1 0 0 0 0 0 0 3 1
+Neighs:    1.05 ave 15 max 0 min
+Histogram: 34 1 2 0 1 0 1 0 0 1
+
+Total # of neighbors = 42
+Ave neighs/atom = 0.146853
+Neighbor list builds = 344
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 10:29:19 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+11359978      286    0.059089888              0 
+11483456      286    0.059436409      1699.8607 
+Loop time of 1699.86 on 40 procs for 123478 steps with 286 atoms, finish time Fri Nov 25 10:57:39 2022
+
+
+Pair  time (%) = 0.269467 (0.0158523)
+Neigh time (%) = 0.0632511 (0.00372096)
+Comm  time (%) = 1.03802 (0.0610648)
+Outpt time (%) = 0.000924989 (5.44156e-05)
+Other time (%) = 1698.49 (99.9193)
+
+Nlocal:    7.15 ave 60 max 0 min
+Histogram: 32 0 1 0 1 3 1 0 1 1
+Nghost:    2.8 ave 30 max 0 min
+Histogram: 35 1 0 0 0 0 0 1 2 1
+Neighs:    0.95 ave 9 max 0 min
+Histogram: 33 1 0 1 1 1 0 1 0 2
+
+Total # of neighbors = 38
+Ave neighs/atom = 0.132867
+Neighbor list builds = 344
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 10:57:39 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+11483456      286    0.059436409              0 
+11606934      286    0.059816996      1692.0523 
+Loop time of 1692.05 on 40 procs for 123478 steps with 286 atoms, finish time Fri Nov 25 11:25:51 2022
+
+
+Pair  time (%) = 0.270255 (0.015972)
+Neigh time (%) = 0.0642964 (0.0037999)
+Comm  time (%) = 1.16225 (0.0686891)
+Outpt time (%) = 0.000644109 (3.80667e-05)
+Other time (%) = 1690.55 (99.9115)
+
+Nlocal:    7.15 ave 57 max 0 min
+Histogram: 32 0 0 1 2 2 1 0 0 2
+Nghost:    2.675 ave 25 max 0 min
+Histogram: 34 1 1 0 0 0 0 0 2 2
+Neighs:    0.925 ave 9 max 0 min
+Histogram: 33 1 1 0 1 0 1 1 1 1
+
+Total # of neighbors = 37
+Ave neighs/atom = 0.129371
+Neighbor list builds = 348
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 11:25:51 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+11606934      286    0.059816996              0 
+11730412      285    0.060526116      1698.6154 
+Loop time of 1698.62 on 40 procs for 123478 steps with 285 atoms, finish time Fri Nov 25 11:54:10 2022
+
+
+Pair  time (%) = 0.267797 (0.0157656)
+Neigh time (%) = 0.0640035 (0.00376798)
+Comm  time (%) = 1.10487 (0.0650456)
+Outpt time (%) = 0.000884038 (5.20446e-05)
+Other time (%) = 1697.18 (99.9154)
+
+Nlocal:    7.125 ave 57 max 0 min
+Histogram: 32 0 1 1 1 2 0 1 0 2
+Nghost:    2.8 ave 26 max 0 min
+Histogram: 34 2 0 0 0 0 0 0 1 3
+Neighs:    0.875 ave 11 max 0 min
+Histogram: 33 2 1 1 0 2 0 0 0 1
+
+Total # of neighbors = 35
+Ave neighs/atom = 0.122807
+Neighbor list builds = 347
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 11:54:10 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+11730412      285    0.060526116              0 
+11853890      285    0.060964607      1701.1266 
+Loop time of 1701.13 on 40 procs for 123478 steps with 285 atoms, finish time Fri Nov 25 12:22:31 2022
+
+
+Pair  time (%) = 0.270126 (0.0158792)
+Neigh time (%) = 0.0639462 (0.00375905)
+Comm  time (%) = 1.09099 (0.0641335)
+Outpt time (%) = 0.000701579 (4.1242e-05)
+Other time (%) = 1699.7 (99.9162)
+
+Nlocal:    7.125 ave 57 max 0 min
+Histogram: 32 0 1 1 0 3 0 1 1 1
+Nghost:    2.875 ave 28 max 0 min
+Histogram: 35 1 0 0 0 0 0 0 1 3
+Neighs:    1 ave 11 max 0 min
+Histogram: 33 1 3 0 0 1 0 0 0 2
+
+Total # of neighbors = 40
+Ave neighs/atom = 0.140351
+Neighbor list builds = 347
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 12:22:31 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+11853890      285    0.060964607              0 
+11977368      285    0.061360771       1698.396 
+Loop time of 1698.4 on 40 procs for 123478 steps with 285 atoms, finish time Fri Nov 25 12:50:49 2022
+
+
+Pair  time (%) = 0.26718 (0.0157313)
+Neigh time (%) = 0.0635241 (0.00374024)
+Comm  time (%) = 1.00358 (0.05909)
+Outpt time (%) = 0.000566819 (3.33738e-05)
+Other time (%) = 1697.06 (99.9214)
+
+Nlocal:    7.125 ave 57 max 0 min
+Histogram: 32 0 1 1 1 1 0 2 1 1
+Nghost:    2.85 ave 27 max 0 min
+Histogram: 32 4 0 0 0 0 0 0 2 2
+Neighs:    1.125 ave 11 max 0 min
+Histogram: 32 1 1 2 0 1 1 1 0 1
+
+Total # of neighbors = 45
+Ave neighs/atom = 0.157895
+Neighbor list builds = 345
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 12:50:49 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+11977368      285    0.061360771              0 
+12100846      284    0.061882769      1699.8073 
+Loop time of 1699.81 on 40 procs for 123478 steps with 284 atoms, finish time Fri Nov 25 13:19:09 2022
+
+
+Pair  time (%) = 0.270218 (0.015897)
+Neigh time (%) = 0.0635655 (0.00373957)
+Comm  time (%) = 0.956519 (0.0562722)
+Outpt time (%) = 0.000957755 (5.63449e-05)
+Other time (%) = 1698.52 (99.924)
+
+Nlocal:    7.1 ave 55 max 0 min
+Histogram: 32 0 1 1 0 1 2 1 0 2
+Nghost:    2.85 ave 29 max 0 min
+Histogram: 33 3 0 0 0 0 1 0 0 3
+Neighs:    0.975 ave 10 max 0 min
+Histogram: 32 2 0 2 0 1 0 0 2 1
+
+Total # of neighbors = 39
+Ave neighs/atom = 0.137324
+Neighbor list builds = 346
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 13:19:09 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+12100846      284    0.061882769              0 
+12224324      283    0.062448896      1803.8688 
+Loop time of 1803.87 on 40 procs for 123478 steps with 283 atoms, finish time Fri Nov 25 13:49:13 2022
+
+
+Pair  time (%) = 0.266445 (0.0147708)
+Neigh time (%) = 0.0638486 (0.00353954)
+Comm  time (%) = 0.913062 (0.0506169)
+Outpt time (%) = 0.000645098 (3.57619e-05)
+Other time (%) = 1802.63 (99.931)
+
+Nlocal:    7.075 ave 55 max 0 min
+Histogram: 32 0 0 1 1 1 3 0 0 2
+Nghost:    2.5 ave 27 max 0 min
+Histogram: 35 1 0 0 0 0 0 2 0 2
+Neighs:    0.975 ave 11 max 0 min
+Histogram: 33 0 2 2 1 0 0 1 0 1
+
+Total # of neighbors = 39
+Ave neighs/atom = 0.137809
+Neighbor list builds = 347
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 13:49:13 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+12224324      283    0.062448896              0 
+12347802      282    0.063207789      1741.0356 
+Loop time of 1741.04 on 40 procs for 123478 steps with 282 atoms, finish time Fri Nov 25 14:18:14 2022
+
+
+Pair  time (%) = 0.26943 (0.0154753)
+Neigh time (%) = 0.0636801 (0.0036576)
+Comm  time (%) = 1.07265 (0.0616096)
+Outpt time (%) = 0.000949797 (5.45536e-05)
+Other time (%) = 1739.63 (99.9192)
+
+Nlocal:    7.05 ave 53 max 0 min
+Histogram: 32 0 0 1 1 2 1 1 0 2
+Nghost:    2.725 ave 30 max 0 min
+Histogram: 32 3 1 0 0 0 2 0 1 1
+Neighs:    1 ave 11 max 0 min
+Histogram: 33 1 1 1 2 0 0 0 1 1
+
+Total # of neighbors = 40
+Ave neighs/atom = 0.141844
+Neighbor list builds = 345
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 99
+Setting up run at Fri Nov 25 14:18:14 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+12347802      282    0.063207789              0 
+12347901      282    0.063152968      1.2998512 
+Loop time of 1.29986 on 40 procs for 99 steps with 282 atoms, finish time Fri Nov 25 14:18:16 2022
+
+
+Pair  time (%) = 0.000207483 (0.0159619)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000312294 (0.0240251)
+Outpt time (%) = 0.000567979 (0.0436953)
+Other time (%) = 1.29878 (99.9163)
+
+Nlocal:    7.05 ave 53 max 0 min
+Histogram: 32 0 0 1 1 2 1 1 0 2
+Nghost:    2.725 ave 30 max 0 min
+Histogram: 32 4 0 0 0 0 2 0 1 1
+Neighs:    1 ave 11 max 0 min
+Histogram: 33 1 1 1 2 0 0 0 1 1
+
+Total # of neighbors = 40
+Ave neighs/atom = 0.141844
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 14:18:16 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+12347901      282    0.063152968              0 
+12471379      282    0.063317592      1699.5602 
+Loop time of 1699.56 on 40 procs for 123478 steps with 282 atoms, finish time Fri Nov 25 14:46:35 2022
+
+
+Pair  time (%) = 0.268388 (0.0157916)
+Neigh time (%) = 0.0635335 (0.00373823)
+Comm  time (%) = 0.972032 (0.0571932)
+Outpt time (%) = 0.000930735 (5.47633e-05)
+Other time (%) = 1698.26 (99.9232)
+
+Nlocal:    7.05 ave 54 max 0 min
+Histogram: 32 0 0 1 1 2 2 0 0 2
+Nghost:    2.525 ave 30 max 0 min
+Histogram: 35 1 0 0 0 0 1 1 1 1
+Neighs:    0.95 ave 9 max 0 min
+Histogram: 32 1 1 1 1 2 0 0 0 2
+
+Total # of neighbors = 38
+Ave neighs/atom = 0.134752
+Neighbor list builds = 344
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 14:46:35 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+12471379      282    0.063317592              0 
+12594857      282    0.063810275      1697.9739 
+Loop time of 1697.97 on 40 procs for 123478 steps with 282 atoms, finish time Fri Nov 25 15:14:53 2022
+
+
+Pair  time (%) = 0.270212 (0.0159138)
+Neigh time (%) = 0.0632915 (0.00372747)
+Comm  time (%) = 1.01035 (0.0595033)
+Outpt time (%) = 0.000964666 (5.68128e-05)
+Other time (%) = 1696.63 (99.9208)
+
+Nlocal:    7.05 ave 54 max 0 min
+Histogram: 32 0 0 1 2 1 1 1 0 2
+Nghost:    2.5 ave 28 max 0 min
+Histogram: 35 1 0 0 0 0 2 0 1 1
+Neighs:    1.1 ave 10 max 0 min
+Histogram: 32 0 0 3 0 3 0 0 0 2
+
+Total # of neighbors = 44
+Ave neighs/atom = 0.156028
+Neighbor list builds = 344
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 15:14:54 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+12594857      282    0.063810275              0 
+12718335      282    0.064081835      1691.3257 
+Loop time of 1691.33 on 40 procs for 123478 steps with 282 atoms, finish time Fri Nov 25 15:43:05 2022
+
+
+Pair  time (%) = 0.26997 (0.015962)
+Neigh time (%) = 0.0631886 (0.00373604)
+Comm  time (%) = 1.27998 (0.0756791)
+Outpt time (%) = 0.000625087 (3.69584e-05)
+Other time (%) = 1689.71 (99.9046)
+
+Nlocal:    7.05 ave 54 max 0 min
+Histogram: 32 0 0 2 1 1 1 0 1 2
+Nghost:    2.575 ave 26 max 0 min
+Histogram: 35 0 0 1 0 0 0 1 2 1
+Neighs:    1.025 ave 11 max 0 min
+Histogram: 34 0 2 0 0 2 0 0 0 2
+
+Total # of neighbors = 41
+Ave neighs/atom = 0.14539
+Neighbor list builds = 343
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 15:43:05 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+12718335      282    0.064081835              0 
+12841813      282    0.065033913      1704.0545 
+Loop time of 1704.05 on 40 procs for 123478 steps with 282 atoms, finish time Fri Nov 25 16:11:29 2022
+
+
+Pair  time (%) = 0.271227 (0.0159166)
+Neigh time (%) = 0.0631867 (0.00370802)
+Comm  time (%) = 1.1695 (0.0686301)
+Outpt time (%) = 0.000699677 (4.10595e-05)
+Other time (%) = 1702.55 (99.9117)
+
+Nlocal:    7.05 ave 53 max 0 min
+Histogram: 32 0 0 2 0 2 1 1 0 2
+Nghost:    2.4 ave 27 max 0 min
+Histogram: 34 2 0 0 0 0 1 2 0 1
+Neighs:    1.1 ave 11 max 0 min
+Histogram: 32 2 0 1 2 1 0 0 1 1
+
+Total # of neighbors = 44
+Ave neighs/atom = 0.156028
+Neighbor list builds = 342
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 16:11:29 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+12841813      282    0.065033913              0 
+12965291      282    0.066019374      1692.0851 
+Loop time of 1692.09 on 40 procs for 123478 steps with 282 atoms, finish time Fri Nov 25 16:39:41 2022
+
+
+Pair  time (%) = 0.273605 (0.0161697)
+Neigh time (%) = 0.0644389 (0.00380826)
+Comm  time (%) = 1.05193 (0.0621677)
+Outpt time (%) = 0.000929941 (5.49583e-05)
+Other time (%) = 1690.69 (99.9178)
+
+Nlocal:    7.05 ave 52 max 0 min
+Histogram: 32 0 0 0 2 2 1 1 0 2
+Nghost:    2.4 ave 27 max 0 min
+Histogram: 34 2 0 0 0 0 1 2 0 1
+Neighs:    1.25 ave 11 max 0 min
+Histogram: 32 1 2 0 1 1 0 0 1 2
+
+Total # of neighbors = 50
+Ave neighs/atom = 0.177305
+Neighbor list builds = 349
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 16:39:41 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+12965291      282    0.066019374              0 
+13088769      281    0.065507759       1698.318 
+Loop time of 1698.32 on 40 procs for 123478 steps with 281 atoms, finish time Fri Nov 25 17:08:00 2022
+
+
+Pair  time (%) = 0.271859 (0.0160075)
+Neigh time (%) = 0.0654518 (0.00385392)
+Comm  time (%) = 1.01245 (0.059615)
+Outpt time (%) = 0.000620565 (3.654e-05)
+Other time (%) = 1696.97 (99.9205)
+
+Nlocal:    7.025 ave 51 max 0 min
+Histogram: 32 0 0 0 2 1 1 2 0 2
+Nghost:    2.5 ave 28 max 0 min
+Histogram: 34 2 0 0 0 0 0 3 0 1
+Neighs:    1.275 ave 11 max 0 min
+Histogram: 32 1 1 1 0 1 2 0 0 2
+
+Total # of neighbors = 51
+Ave neighs/atom = 0.181495
+Neighbor list builds = 353
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 17:08:00 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+13088769      281    0.065507759              0 
+13212247      278    0.066460995      1699.5947 
+Loop time of 1699.59 on 40 procs for 123478 steps with 278 atoms, finish time Fri Nov 25 17:36:19 2022
+
+
+Pair  time (%) = 0.276216 (0.0162519)
+Neigh time (%) = 0.0652047 (0.00383648)
+Comm  time (%) = 1.1764 (0.0692166)
+Outpt time (%) = 0.000911817 (5.36491e-05)
+Other time (%) = 1698.08 (99.9106)
+
+Nlocal:    6.95 ave 50 max 0 min
+Histogram: 32 0 0 1 1 0 2 2 0 2
+Nghost:    2.25 ave 28 max 0 min
+Histogram: 35 1 0 0 0 1 2 0 0 1
+Neighs:    1.25 ave 12 max 0 min
+Histogram: 32 1 1 2 0 1 0 1 1 1
+
+Total # of neighbors = 50
+Ave neighs/atom = 0.179856
+Neighbor list builds = 353
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 17:36:19 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+13212247      278    0.066460995              0 
+13335725      276    0.065859904      1700.1934 
+Loop time of 1700.19 on 40 procs for 123478 steps with 276 atoms, finish time Fri Nov 25 18:04:40 2022
+
+
+Pair  time (%) = 0.271736 (0.0159827)
+Neigh time (%) = 0.0641016 (0.00377025)
+Comm  time (%) = 1.18159 (0.0694971)
+Outpt time (%) = 5.1832e-05 (3.0486e-06)
+Other time (%) = 1698.68 (99.9107)
+
+Nlocal:    6.9 ave 50 max 0 min
+Histogram: 32 0 0 1 1 1 1 0 2 2
+Nghost:    2.425 ave 27 max 0 min
+Histogram: 34 1 1 0 0 0 1 2 0 1
+Neighs:    1.325 ave 14 max 0 min
+Histogram: 33 0 3 1 0 0 0 1 0 2
+
+Total # of neighbors = 53
+Ave neighs/atom = 0.192029
+Neighbor list builds = 348
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 18:04:40 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+13335725      276    0.065859904              0 
+13459203      276    0.066144588       1728.916 
+Loop time of 1728.92 on 40 procs for 123478 steps with 276 atoms, finish time Fri Nov 25 18:33:29 2022
+
+
+Pair  time (%) = 0.271879 (0.0157254)
+Neigh time (%) = 0.0628102 (0.00363292)
+Comm  time (%) = 1.082 (0.0625825)
+Outpt time (%) = 0.000959836 (5.55166e-05)
+Other time (%) = 1727.5 (99.918)
+
+Nlocal:    6.9 ave 50 max 0 min
+Histogram: 32 0 0 0 0 3 3 0 0 2
+Nghost:    2.275 ave 25 max 0 min
+Histogram: 34 2 0 0 0 0 0 3 0 1
+Neighs:    1.35 ave 12 max 0 min
+Histogram: 33 0 0 0 3 1 0 1 0 2
+
+Total # of neighbors = 54
+Ave neighs/atom = 0.195652
+Neighbor list builds = 340
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 18:33:29 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+13459203      276    0.066144588              0 
+13582681      275    0.066538224      1788.5963 
+Loop time of 1788.6 on 40 procs for 123478 steps with 275 atoms, finish time Fri Nov 25 19:03:18 2022
+
+
+Pair  time (%) = 0.271229 (0.0151643)
+Neigh time (%) = 0.0617969 (0.00345504)
+Comm  time (%) = 1.27497 (0.0712832)
+Outpt time (%) = 0.000610953 (3.41581e-05)
+Other time (%) = 1786.99 (99.9101)
+
+Nlocal:    6.875 ave 48 max 0 min
+Histogram: 32 0 0 0 2 1 1 1 1 2
+Nghost:    2.3 ave 27 max 0 min
+Histogram: 33 3 0 0 0 1 1 1 0 1
+Neighs:    1.35 ave 10 max 0 min
+Histogram: 32 1 0 0 1 0 1 1 1 3
+
+Total # of neighbors = 54
+Ave neighs/atom = 0.196364
+Neighbor list builds = 334
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 19:03:18 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+13582681      275    0.066538224              0 
+13706159      275    0.067396145      1696.6412 
+Loop time of 1696.64 on 40 procs for 123478 steps with 275 atoms, finish time Fri Nov 25 19:31:34 2022
+
+
+Pair  time (%) = 0.272794 (0.0160785)
+Neigh time (%) = 0.0621476 (0.00366298)
+Comm  time (%) = 1.41224 (0.0832372)
+Outpt time (%) = 0.000911538 (5.3726e-05)
+Other time (%) = 1694.89 (99.897)
+
+Nlocal:    6.875 ave 49 max 0 min
+Histogram: 32 0 0 0 2 2 0 1 1 2
+Nghost:    2.225 ave 26 max 0 min
+Histogram: 33 2 1 0 1 0 2 0 0 1
+Neighs:    1.3 ave 10 max 0 min
+Histogram: 32 1 0 1 1 0 0 1 0 4
+
+Total # of neighbors = 52
+Ave neighs/atom = 0.189091
+Neighbor list builds = 336
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 19:31:34 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+13706159      275    0.067396145              0 
+13829637      275    0.068473834      1737.9028 
+Loop time of 1737.9 on 40 procs for 123478 steps with 275 atoms, finish time Fri Nov 25 20:00:32 2022
+
+
+Pair  time (%) = 0.271898 (0.0156452)
+Neigh time (%) = 0.0621998 (0.00357901)
+Comm  time (%) = 1.2995 (0.0747741)
+Outpt time (%) = 0.000589442 (3.39168e-05)
+Other time (%) = 1736.27 (99.906)
+
+Nlocal:    6.875 ave 48 max 0 min
+Histogram: 32 0 0 0 0 4 1 0 1 2
+Nghost:    2.1 ave 24 max 0 min
+Histogram: 33 3 0 0 0 2 0 1 0 1
+Neighs:    1.25 ave 12 max 0 min
+Histogram: 33 0 0 3 0 0 1 2 0 1
+
+Total # of neighbors = 50
+Ave neighs/atom = 0.181818
+Neighbor list builds = 336
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 20:00:33 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+13829637      275    0.068473834              0 
+13953115      274    0.068012609      1716.5249 
+Loop time of 1716.52 on 40 procs for 123478 steps with 274 atoms, finish time Fri Nov 25 20:29:09 2022
+
+
+Pair  time (%) = 0.268465 (0.01564)
+Neigh time (%) = 0.062364 (0.00363316)
+Comm  time (%) = 1.04746 (0.0610221)
+Outpt time (%) = 0.000588102 (3.42612e-05)
+Other time (%) = 1715.15 (99.9197)
+
+Nlocal:    6.85 ave 48 max 0 min
+Histogram: 32 0 0 0 3 0 1 1 1 2
+Nghost:    1.975 ave 22 max 0 min
+Histogram: 35 0 1 0 0 0 1 2 0 1
+Neighs:    1.2 ave 11 max 0 min
+Histogram: 32 0 2 2 0 0 2 0 1 1
+
+Total # of neighbors = 48
+Ave neighs/atom = 0.175182
+Neighbor list builds = 336
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 20:29:09 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+13953115      274    0.068012609              0 
+14076593      274    0.069251438      1700.0943 
+Loop time of 1700.09 on 40 procs for 123478 steps with 274 atoms, finish time Fri Nov 25 20:57:29 2022
+
+
+Pair  time (%) = 0.27023 (0.015895)
+Neigh time (%) = 0.0621719 (0.00365697)
+Comm  time (%) = 1.15682 (0.0680444)
+Outpt time (%) = 0.000960798 (5.65144e-05)
+Other time (%) = 1698.6 (99.9123)
+
+Nlocal:    6.85 ave 47 max 0 min
+Histogram: 32 0 0 1 1 0 1 2 0 3
+Nghost:    2.075 ave 23 max 0 min
+Histogram: 34 2 0 0 0 1 1 1 0 1
+Neighs:    1.125 ave 9 max 0 min
+Histogram: 32 0 0 4 0 0 0 1 1 2
+
+Total # of neighbors = 45
+Ave neighs/atom = 0.164234
+Neighbor list builds = 336
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 20:57:29 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+14076593      274    0.069251438              0 
+14200071      273    0.069268996      1692.5984 
+Loop time of 1692.6 on 40 procs for 123478 steps with 273 atoms, finish time Fri Nov 25 21:25:42 2022
+
+
+Pair  time (%) = 0.273191 (0.0161403)
+Neigh time (%) = 0.0621636 (0.00367267)
+Comm  time (%) = 1.14879 (0.0678713)
+Outpt time (%) = 0.000569408 (3.3641e-05)
+Other time (%) = 1691.11 (99.9123)
+
+Nlocal:    6.825 ave 46 max 0 min
+Histogram: 32 0 0 1 0 1 2 1 0 3
+Nghost:    2.025 ave 24 max 0 min
+Histogram: 35 0 1 0 0 1 1 1 0 1
+Neighs:    1.1 ave 8 max 0 min
+Histogram: 32 0 0 1 0 2 1 1 2 1
+
+Total # of neighbors = 44
+Ave neighs/atom = 0.161172
+Neighbor list builds = 335
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 21:25:42 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+14200071      273    0.069268996              0 
+14323549      272     0.06989663      1700.0922 
+Loop time of 1700.09 on 40 procs for 123478 steps with 272 atoms, finish time Fri Nov 25 21:54:02 2022
+
+
+Pair  time (%) = 0.27392 (0.016112)
+Neigh time (%) = 0.0622653 (0.00366247)
+Comm  time (%) = 0.935538 (0.0550286)
+Outpt time (%) = 0.000980836 (5.76931e-05)
+Other time (%) = 1698.82 (99.9251)
+
+Nlocal:    6.8 ave 56 max 0 min
+Histogram: 32 0 1 1 1 1 1 1 1 1
+Nghost:    1.825 ave 22 max 0 min
+Histogram: 34 2 0 0 1 0 1 1 0 1
+Neighs:    0.9 ave 11 max 0 min
+Histogram: 33 1 2 1 1 0 0 1 0 1
+
+Total # of neighbors = 36
+Ave neighs/atom = 0.132353
+Neighbor list builds = 337
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 21:54:02 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+14323549      272     0.06989663              0 
+14447027      272    0.070100479        1700.49 
+Loop time of 1700.49 on 40 procs for 123478 steps with 272 atoms, finish time Fri Nov 25 22:22:23 2022
+
+
+Pair  time (%) = 0.272499 (0.0160247)
+Neigh time (%) = 0.0627176 (0.00368821)
+Comm  time (%) = 0.965085 (0.0567534)
+Outpt time (%) = 0.000629956 (3.70456e-05)
+Other time (%) = 1699.19 (99.9235)
+
+Nlocal:    6.8 ave 47 max 0 min
+Histogram: 32 0 0 0 2 0 1 2 2 1
+Nghost:    2.125 ave 21 max 0 min
+Histogram: 33 1 2 0 0 0 1 1 1 1
+Neighs:    0.975 ave 8 max 0 min
+Histogram: 32 0 2 0 0 2 1 1 0 2
+
+Total # of neighbors = 39
+Ave neighs/atom = 0.143382
+Neighbor list builds = 338
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 22:22:23 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+14447027      272    0.070100479              0 
+14570505      272    0.070795723      1691.7468 
+Loop time of 1691.75 on 40 procs for 123478 steps with 272 atoms, finish time Fri Nov 25 22:50:35 2022
+
+
+Pair  time (%) = 0.274545 (0.0162285)
+Neigh time (%) = 0.0625137 (0.00369522)
+Comm  time (%) = 1.11815 (0.0660942)
+Outpt time (%) = 0.000949161 (5.61054e-05)
+Other time (%) = 1690.29 (99.9139)
+
+Nlocal:    6.8 ave 48 max 0 min
+Histogram: 32 0 0 1 1 2 0 0 2 2
+Nghost:    1.775 ave 22 max 0 min
+Histogram: 35 1 0 0 1 1 0 0 1 1
+Neighs:    0.95 ave 7 max 0 min
+Histogram: 32 0 1 0 1 2 0 1 1 2
+
+Total # of neighbors = 38
+Ave neighs/atom = 0.139706
+Neighbor list builds = 338
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 22:50:35 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+14570505      272    0.070795723              0 
+14693983      272    0.071435858      1700.9179 
+Loop time of 1700.92 on 40 procs for 123478 steps with 272 atoms, finish time Fri Nov 25 23:18:56 2022
+
+
+Pair  time (%) = 0.273733 (0.0160932)
+Neigh time (%) = 0.062387 (0.00366784)
+Comm  time (%) = 0.897301 (0.0527539)
+Outpt time (%) = 0.000607374 (3.57086e-05)
+Other time (%) = 1699.68 (99.9274)
+
+Nlocal:    6.8 ave 46 max 0 min
+Histogram: 32 0 0 0 1 1 0 3 2 1
+Nghost:    1.875 ave 20 max 0 min
+Histogram: 31 4 1 0 1 0 1 0 0 2
+Neighs:    0.775 ave 8 max 0 min
+Histogram: 32 2 1 1 0 1 1 0 1 1
+
+Total # of neighbors = 31
+Ave neighs/atom = 0.113971
+Neighbor list builds = 337
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 23:18:56 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+14693983      272    0.071435858              0 
+14817461      272    0.071784105      1701.7274 
+Loop time of 1701.73 on 40 procs for 123478 steps with 272 atoms, finish time Fri Nov 25 23:47:17 2022
+
+
+Pair  time (%) = 0.274794 (0.0161479)
+Neigh time (%) = 0.0629674 (0.0037002)
+Comm  time (%) = 1.01147 (0.0594379)
+Outpt time (%) = 0.000612681 (3.60035e-05)
+Other time (%) = 1700.38 (99.9207)
+
+Nlocal:    6.8 ave 54 max 0 min
+Histogram: 32 0 0 1 2 2 0 1 1 1
+Nghost:    1.85 ave 20 max 0 min
+Histogram: 32 3 1 0 0 1 1 0 0 2
+Neighs:    0.825 ave 7 max 0 min
+Histogram: 33 0 0 0 2 1 0 2 1 1
+
+Total # of neighbors = 33
+Ave neighs/atom = 0.121324
+Neighbor list builds = 339
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Fri Nov 25 23:47:17 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+14817461      272    0.071784105              0 
+14940939      272    0.072575188      1693.5335 
+Loop time of 1693.53 on 40 procs for 123478 steps with 272 atoms, finish time Sat Nov 26 00:15:31 2022
+
+
+Pair  time (%) = 0.273865 (0.0161712)
+Neigh time (%) = 0.062762 (0.00370598)
+Comm  time (%) = 1.26094 (0.0744559)
+Outpt time (%) = 0.000937533 (5.53595e-05)
+Other time (%) = 1691.94 (99.9056)
+
+Nlocal:    6.8 ave 47 max 0 min
+Histogram: 32 0 0 1 1 0 1 2 1 2
+Nghost:    1.85 ave 20 max 0 min
+Histogram: 32 4 0 0 0 2 0 0 0 2
+Neighs:    1.125 ave 9 max 0 min
+Histogram: 32 0 0 1 1 3 1 0 1 1
+
+Total # of neighbors = 45
+Ave neighs/atom = 0.165441
+Neighbor list builds = 339
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 00:15:31 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+14940939      272    0.072575188              0 
+15064417      272    0.072796677      1700.4509 
+Loop time of 1700.45 on 40 procs for 123478 steps with 272 atoms, finish time Sat Nov 26 00:43:52 2022
+
+
+Pair  time (%) = 0.276183 (0.0162418)
+Neigh time (%) = 0.0639896 (0.00376309)
+Comm  time (%) = 1.22781 (0.0722049)
+Outpt time (%) = 0.000659176 (3.87648e-05)
+Other time (%) = 1698.88 (99.9078)
+
+Nlocal:    6.8 ave 47 max 0 min
+Histogram: 32 0 0 0 1 1 1 2 2 1
+Nghost:    2 ave 20 max 0 min
+Histogram: 32 3 0 1 1 0 1 0 0 2
+Neighs:    1.075 ave 11 max 0 min
+Histogram: 33 1 0 0 3 0 2 0 0 1
+
+Total # of neighbors = 43
+Ave neighs/atom = 0.158088
+Neighbor list builds = 345
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 00:43:52 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+15064417      272    0.072796677              0 
+15187895      272    0.072948143      1708.2532 
+Loop time of 1708.25 on 40 procs for 123478 steps with 272 atoms, finish time Sat Nov 26 01:12:20 2022
+
+
+Pair  time (%) = 0.277329 (0.0162347)
+Neigh time (%) = 0.0653127 (0.00382336)
+Comm  time (%) = 1.2884 (0.075422)
+Outpt time (%) = 0.0129374 (0.000757344)
+Other time (%) = 1706.61 (99.9038)
+
+Nlocal:    6.8 ave 47 max 0 min
+Histogram: 32 0 0 1 0 1 0 4 1 1
+Nghost:    2.175 ave 23 max 0 min
+Histogram: 34 1 1 1 0 0 0 1 0 2
+Neighs:    1.425 ave 11 max 0 min
+Histogram: 33 0 0 0 1 1 1 1 1 2
+
+Total # of neighbors = 57
+Ave neighs/atom = 0.209559
+Neighbor list builds = 352
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 01:12:20 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+15187895      272    0.072948143              0 
+15311373      272    0.073320299      1710.9886 
+Loop time of 1711 on 40 procs for 123478 steps with 272 atoms, finish time Sat Nov 26 01:40:51 2022
+
+
+Pair  time (%) = 0.282258 (0.0164967)
+Neigh time (%) = 0.0645418 (0.00377217)
+Comm  time (%) = 1.24863 (0.0729768)
+Outpt time (%) = 0.000674478 (3.94201e-05)
+Other time (%) = 1709.4 (99.9067)
+
+Nlocal:    6.8 ave 47 max 0 min
+Histogram: 32 0 1 0 0 0 2 3 1 1
+Nghost:    2.025 ave 23 max 0 min
+Histogram: 34 1 1 0 1 1 0 0 0 2
+Neighs:    1.125 ave 10 max 0 min
+Histogram: 32 0 0 1 2 2 1 0 1 1
+
+Total # of neighbors = 45
+Ave neighs/atom = 0.165441
+Neighbor list builds = 348
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 01:40:51 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+15311373      272    0.073320299              0 
+15434851      272    0.073963216      1696.6432 
+Loop time of 1696.64 on 40 procs for 123478 steps with 272 atoms, finish time Sat Nov 26 02:09:08 2022
+
+
+Pair  time (%) = 0.28 (0.0165032)
+Neigh time (%) = 0.0644379 (0.00379796)
+Comm  time (%) = 1.15449 (0.0680457)
+Outpt time (%) = 0.000920161 (5.42342e-05)
+Other time (%) = 1695.14 (99.9116)
+
+Nlocal:    6.8 ave 46 max 0 min
+Histogram: 32 0 0 1 0 1 1 0 4 1
+Nghost:    1.875 ave 24 max 0 min
+Histogram: 34 2 0 1 1 0 0 0 1 1
+Neighs:    1.15 ave 12 max 0 min
+Histogram: 32 0 1 1 3 2 0 0 0 1
+
+Total # of neighbors = 46
+Ave neighs/atom = 0.169118
+Neighbor list builds = 348
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 02:09:08 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+15434851      272    0.073963216              0 
+15558329      272    0.074921188      1704.1778 
+Loop time of 1704.18 on 40 procs for 123478 steps with 272 atoms, finish time Sat Nov 26 02:37:32 2022
+
+
+Pair  time (%) = 0.279359 (0.0163925)
+Neigh time (%) = 0.0653551 (0.00383498)
+Comm  time (%) = 1.08566 (0.0637054)
+Outpt time (%) = 0.000595136 (3.49221e-05)
+Other time (%) = 1702.75 (99.916)
+
+Nlocal:    6.8 ave 46 max 0 min
+Histogram: 32 0 0 1 0 1 1 2 1 2
+Nghost:    2.075 ave 22 max 0 min
+Histogram: 34 1 1 1 0 0 0 0 1 2
+Neighs:    1.175 ave 9 max 0 min
+Histogram: 32 1 0 0 1 2 0 1 2 1
+
+Total # of neighbors = 47
+Ave neighs/atom = 0.172794
+Neighbor list builds = 353
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 02:37:32 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+15558329      272    0.074921188              0 
+15681807      271    0.075276838      1701.8665 
+Loop time of 1701.87 on 40 procs for 123478 steps with 271 atoms, finish time Sat Nov 26 03:05:54 2022
+
+
+Pair  time (%) = 0.27805 (0.016338)
+Neigh time (%) = 0.0650455 (0.00382201)
+Comm  time (%) = 1.14474 (0.0672638)
+Outpt time (%) = 0.000958122 (5.62983e-05)
+Other time (%) = 1700.38 (99.9125)
+
+Nlocal:    6.775 ave 46 max 0 min
+Histogram: 32 0 0 0 0 2 0 3 2 1
+Nghost:    1.975 ave 20 max 0 min
+Histogram: 32 3 0 1 0 1 0 1 0 2
+Neighs:    1.25 ave 10 max 0 min
+Histogram: 32 1 0 1 0 0 2 1 1 2
+
+Total # of neighbors = 50
+Ave neighs/atom = 0.184502
+Neighbor list builds = 351
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 03:05:54 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+15681807      271    0.075276838              0 
+15805285      271    0.075409659      1710.6139 
+Loop time of 1710.62 on 40 procs for 123478 steps with 271 atoms, finish time Sat Nov 26 03:34:25 2022
+
+
+Pair  time (%) = 0.277479 (0.016221)
+Neigh time (%) = 0.0640812 (0.00374608)
+Comm  time (%) = 1.08653 (0.0635169)
+Outpt time (%) = 0.0006783 (3.96523e-05)
+Other time (%) = 1709.19 (99.9165)
+
+Nlocal:    6.775 ave 46 max 0 min
+Histogram: 32 0 0 1 0 1 1 1 2 2
+Nghost:    1.725 ave 20 max 0 min
+Histogram: 34 2 0 0 0 2 0 0 0 2
+Neighs:    1 ave 8 max 0 min
+Histogram: 33 0 1 1 0 0 0 2 1 2
+
+Total # of neighbors = 40
+Ave neighs/atom = 0.147601
+Neighbor list builds = 346
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 03:34:25 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+15805285      271    0.075409659              0 
+15928763      271    0.075875566      1704.1016 
+Loop time of 1704.1 on 40 procs for 123478 steps with 271 atoms, finish time Sat Nov 26 04:02:49 2022
+
+
+Pair  time (%) = 0.276798 (0.0162431)
+Neigh time (%) = 0.0648093 (0.00380313)
+Comm  time (%) = 1.14906 (0.0674288)
+Outpt time (%) = 0.000669889 (3.93104e-05)
+Other time (%) = 1702.61 (99.9125)
+
+Nlocal:    6.775 ave 49 max 0 min
+Histogram: 32 0 0 0 2 0 3 1 0 2
+Nghost:    1.8 ave 19 max 0 min
+Histogram: 33 3 0 0 0 1 1 0 0 2
+Neighs:    0.975 ave 8 max 0 min
+Histogram: 32 2 1 0 0 0 1 0 2 2
+
+Total # of neighbors = 39
+Ave neighs/atom = 0.143911
+Neighbor list builds = 349
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 04:02:49 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+15928763      271    0.075875566              0 
+16052241      271    0.076430738       1707.516 
+Loop time of 1707.52 on 40 procs for 123478 steps with 271 atoms, finish time Sat Nov 26 04:31:17 2022
+
+
+Pair  time (%) = 0.277813 (0.01627)
+Neigh time (%) = 0.0653562 (0.00382756)
+Comm  time (%) = 1.33838 (0.0783818)
+Outpt time (%) = 0.00101858 (5.9653e-05)
+Other time (%) = 1705.83 (99.9015)
+
+Nlocal:    6.775 ave 47 max 0 min
+Histogram: 32 0 0 1 1 1 0 3 0 2
+Nghost:    1.925 ave 20 max 0 min
+Histogram: 32 2 2 0 1 0 1 0 0 2
+Neighs:    0.975 ave 10 max 0 min
+Histogram: 32 1 2 1 0 1 0 0 2 1
+
+Total # of neighbors = 39
+Ave neighs/atom = 0.143911
+Neighbor list builds = 353
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 04:31:17 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+16052241      271    0.076430738              0 
+16175719      270    0.077016983      1702.3135 
+Loop time of 1702.31 on 40 procs for 123478 steps with 270 atoms, finish time Sat Nov 26 04:59:39 2022
+
+
+Pair  time (%) = 0.27991 (0.0164429)
+Neigh time (%) = 0.0640173 (0.0037606)
+Comm  time (%) = 1.30886 (0.0768873)
+Outpt time (%) = 0.000653547 (3.83917e-05)
+Other time (%) = 1700.66 (99.9029)
+
+Nlocal:    6.75 ave 45 max 0 min
+Histogram: 32 0 0 0 1 1 2 0 1 3
+Nghost:    1.75 ave 20 max 0 min
+Histogram: 34 1 1 1 0 0 1 0 0 2
+Neighs:    1.05 ave 9 max 0 min
+Histogram: 32 1 0 1 1 2 0 1 1 1
+
+Total # of neighbors = 42
+Ave neighs/atom = 0.155556
+Neighbor list builds = 344
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 04:59:39 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+16175719      270    0.077016983              0 
+16299197      270    0.077400817      1715.1544 
+Loop time of 1715.15 on 40 procs for 123478 steps with 270 atoms, finish time Sat Nov 26 05:28:15 2022
+
+
+Pair  time (%) = 0.280912 (0.0163782)
+Neigh time (%) = 0.0628851 (0.00366644)
+Comm  time (%) = 1.33047 (0.0775712)
+Outpt time (%) = 0.00104002 (6.06368e-05)
+Other time (%) = 1713.48 (99.9023)
+
+Nlocal:    6.75 ave 44 max 0 min
+Histogram: 32 0 0 0 1 0 1 3 2 1
+Nghost:    1.825 ave 17 max 0 min
+Histogram: 32 3 0 1 0 0 0 2 0 2
+Neighs:    0.95 ave 8 max 0 min
+Histogram: 32 0 1 1 0 2 1 2 0 1
+
+Total # of neighbors = 38
+Ave neighs/atom = 0.140741
+Neighbor list builds = 339
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 05:28:15 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+16299197      270    0.077400817              0 
+16422675      270    0.077950547      1708.2892 
+Loop time of 1708.29 on 40 procs for 123478 steps with 270 atoms, finish time Sat Nov 26 05:56:43 2022
+
+
+Pair  time (%) = 0.277856 (0.0162652)
+Neigh time (%) = 0.0637085 (0.00372937)
+Comm  time (%) = 1.14018 (0.0667437)
+Outpt time (%) = 8.80721e-05 (5.15557e-06)
+Other time (%) = 1706.81 (99.9133)
+
+Nlocal:    6.75 ave 47 max 0 min
+Histogram: 32 0 0 1 0 1 2 1 2 1
+Nghost:    1.7 ave 19 max 0 min
+Histogram: 34 1 0 2 0 1 0 0 1 1
+Neighs:    1 ave 9 max 0 min
+Histogram: 32 1 1 1 0 1 1 2 0 1
+
+Total # of neighbors = 40
+Ave neighs/atom = 0.148148
+Neighbor list builds = 343
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 05:56:43 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+16422675      270    0.077950547              0 
+16546153      270    0.077833558      1714.7102 
+Loop time of 1714.71 on 40 procs for 123478 steps with 270 atoms, finish time Sat Nov 26 06:25:18 2022
+
+
+Pair  time (%) = 0.275971 (0.0160943)
+Neigh time (%) = 0.0621135 (0.00362239)
+Comm  time (%) = 1.22709 (0.0715626)
+Outpt time (%) = 0.0225977 (0.00131787)
+Other time (%) = 1713.12 (99.9074)
+
+Nlocal:    6.75 ave 42 max 0 min
+Histogram: 32 0 0 1 0 1 1 0 1 4
+Nghost:    1.675 ave 19 max 0 min
+Histogram: 32 3 1 0 2 0 0 0 0 2
+Neighs:    1.075 ave 11 max 0 min
+Histogram: 33 1 0 2 1 0 1 0 1 1
+
+Total # of neighbors = 43
+Ave neighs/atom = 0.159259
+Neighbor list builds = 336
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 06:25:18 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+16546153      270    0.077833558              0 
+16669631      270    0.078111295      1717.7274 
+Loop time of 1717.73 on 40 procs for 123478 steps with 270 atoms, finish time Sat Nov 26 06:53:56 2022
+
+
+Pair  time (%) = 0.279014 (0.0162432)
+Neigh time (%) = 0.0632896 (0.00368449)
+Comm  time (%) = 1.21242 (0.0705828)
+Outpt time (%) = 0.000707513 (4.11889e-05)
+Other time (%) = 1716.17 (99.9094)
+
+Nlocal:    6.75 ave 50 max 0 min
+Histogram: 32 0 1 0 1 1 1 1 2 1
+Nghost:    1.775 ave 21 max 0 min
+Histogram: 34 1 1 1 1 0 0 0 0 2
+Neighs:    1.05 ave 11 max 0 min
+Histogram: 33 2 0 0 2 0 1 0 1 1
+
+Total # of neighbors = 42
+Ave neighs/atom = 0.155556
+Neighbor list builds = 341
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 06:53:56 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+16669631      270    0.078111295              0 
+16793109      269    0.078728328      1711.3636 
+Loop time of 1711.36 on 40 procs for 123478 steps with 269 atoms, finish time Sat Nov 26 07:22:27 2022
+
+
+Pair  time (%) = 0.275875 (0.0161202)
+Neigh time (%) = 0.0636914 (0.00372168)
+Comm  time (%) = 1.27043 (0.0742349)
+Outpt time (%) = 0.000789307 (4.61215e-05)
+Other time (%) = 1709.75 (99.9059)
+
+Nlocal:    6.725 ave 54 max 0 min
+Histogram: 32 0 2 0 0 2 0 3 0 1
+Nghost:    1.725 ave 19 max 0 min
+Histogram: 32 4 0 0 1 0 1 1 0 1
+Neighs:    0.9 ave 12 max 0 min
+Histogram: 34 2 0 0 2 0 1 0 0 1
+
+Total # of neighbors = 36
+Ave neighs/atom = 0.133829
+Neighbor list builds = 343
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 07:22:27 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+16793109      269    0.078728328              0 
+16916587      269    0.079314298      1713.0033 
+Loop time of 1713 on 40 procs for 123478 steps with 269 atoms, finish time Sat Nov 26 07:51:00 2022
+
+
+Pair  time (%) = 0.271978 (0.0158773)
+Neigh time (%) = 0.0632711 (0.00369358)
+Comm  time (%) = 1.16992 (0.0682966)
+Outpt time (%) = 0.00104017 (6.07218e-05)
+Other time (%) = 1711.5 (99.9121)
+
+Nlocal:    6.725 ave 46 max 0 min
+Histogram: 32 0 0 1 1 1 0 0 2 3
+Nghost:    1.625 ave 18 max 0 min
+Histogram: 33 2 1 0 1 0 1 1 0 1
+Neighs:    1.025 ave 10 max 0 min
+Histogram: 32 2 1 0 0 1 1 0 2 1
+
+Total # of neighbors = 41
+Ave neighs/atom = 0.152416
+Neighbor list builds = 342
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 07:51:00 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+16916587      269    0.079314298              0 
+17040065      269    0.079886446      1708.7652 
+Loop time of 1708.78 on 40 procs for 123478 steps with 269 atoms, finish time Sat Nov 26 08:19:29 2022
+
+
+Pair  time (%) = 0.271406 (0.015883)
+Neigh time (%) = 0.0626197 (0.00366458)
+Comm  time (%) = 1.07006 (0.0626211)
+Outpt time (%) = 0.000803248 (4.70071e-05)
+Other time (%) = 1707.38 (99.9178)
+
+Nlocal:    6.725 ave 55 max 0 min
+Histogram: 32 1 0 1 0 1 3 1 0 1
+Nghost:    1.425 ave 14 max 0 min
+Histogram: 33 2 1 0 0 1 0 0 1 2
+Neighs:    1.1 ave 15 max 0 min
+Histogram: 34 1 1 1 1 0 1 0 0 1
+
+Total # of neighbors = 44
+Ave neighs/atom = 0.163569
+Neighbor list builds = 338
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 08:19:30 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+17040065      269    0.079886446              0 
+17163543      269    0.080480083      1713.5155 
+Loop time of 1713.52 on 40 procs for 123478 steps with 269 atoms, finish time Sat Nov 26 08:48:04 2022
+
+
+Pair  time (%) = 0.278403 (0.0162475)
+Neigh time (%) = 0.062003 (0.00361846)
+Comm  time (%) = 1.22881 (0.071713)
+Outpt time (%) = 0.000978151 (5.70845e-05)
+Other time (%) = 1711.95 (99.9084)
+
+Nlocal:    6.725 ave 52 max 0 min
+Histogram: 32 0 0 1 2 1 0 2 1 1
+Nghost:    1.375 ave 14 max 0 min
+Histogram: 33 2 1 0 1 0 0 1 0 2
+Neighs:    1.125 ave 11 max 0 min
+Histogram: 32 2 0 1 1 2 0 0 1 1
+
+Total # of neighbors = 45
+Ave neighs/atom = 0.167286
+Neighbor list builds = 335
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 08:48:04 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+17163543      269    0.080480083              0 
+17287021      269    0.080647319      1708.7045 
+Loop time of 1708.7 on 40 procs for 123478 steps with 269 atoms, finish time Sat Nov 26 09:16:32 2022
+
+
+Pair  time (%) = 0.276732 (0.0161954)
+Neigh time (%) = 0.0629537 (0.00368429)
+Comm  time (%) = 1.09696 (0.0641982)
+Outpt time (%) = 0.000823324 (4.81841e-05)
+Other time (%) = 1707.27 (99.9159)
+
+Nlocal:    6.725 ave 56 max 0 min
+Histogram: 32 0 0 2 0 2 2 1 0 1
+Nghost:    1.5 ave 15 max 0 min
+Histogram: 33 0 3 0 0 0 1 1 1 1
+Neighs:    1.15 ave 16 max 0 min
+Histogram: 32 4 0 1 1 1 0 0 0 1
+
+Total # of neighbors = 46
+Ave neighs/atom = 0.171004
+Neighbor list builds = 339
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 09:16:32 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+17287021      269    0.080647319              0 
+17410499      269    0.081122765      1715.0991 
+Loop time of 1715.1 on 40 procs for 123478 steps with 269 atoms, finish time Sat Nov 26 09:45:08 2022
+
+
+Pair  time (%) = 0.273506 (0.0159469)
+Neigh time (%) = 0.0631846 (0.00368402)
+Comm  time (%) = 1.21922 (0.0710876)
+Outpt time (%) = 0.00103251 (6.02014e-05)
+Other time (%) = 1713.54 (99.9092)
+
+Nlocal:    6.725 ave 54 max 0 min
+Histogram: 32 0 0 0 3 1 2 1 0 1
+Nghost:    1.275 ave 14 max 0 min
+Histogram: 33 2 1 0 0 1 1 1 0 1
+Neighs:    0.9 ave 9 max 0 min
+Histogram: 33 1 0 1 1 1 1 0 1 1
+
+Total # of neighbors = 36
+Ave neighs/atom = 0.133829
+Neighbor list builds = 341
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 09:45:08 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+17410499      269    0.081122765              0 
+17533977      269    0.081465146      1700.8245 
+Loop time of 1700.82 on 40 procs for 123478 steps with 269 atoms, finish time Sat Nov 26 10:13:28 2022
+
+
+Pair  time (%) = 0.269202 (0.0158277)
+Neigh time (%) = 0.0646721 (0.0038024)
+Comm  time (%) = 1.01751 (0.0598244)
+Outpt time (%) = 0.000727721 (4.27864e-05)
+Other time (%) = 1699.47 (99.9205)
+
+Nlocal:    6.725 ave 58 max 0 min
+Histogram: 32 0 0 2 1 2 1 1 0 1
+Nghost:    1.525 ave 17 max 0 min
+Histogram: 32 4 0 0 0 1 1 1 0 1
+Neighs:    0.95 ave 10 max 0 min
+Histogram: 32 0 3 1 0 1 0 2 0 1
+
+Total # of neighbors = 38
+Ave neighs/atom = 0.141264
+Neighbor list builds = 349
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 10:13:29 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+17533977      269    0.081465146              0 
+17657455      269    0.081801897      1714.2717 
+Loop time of 1714.27 on 40 procs for 123478 steps with 269 atoms, finish time Sat Nov 26 10:42:03 2022
+
+
+Pair  time (%) = 0.275364 (0.016063)
+Neigh time (%) = 0.0697071 (0.00406628)
+Comm  time (%) = 1.10277 (0.0643285)
+Outpt time (%) = 0.00105451 (6.15138e-05)
+Other time (%) = 1712.82 (99.9155)
+
+Nlocal:    6.725 ave 63 max 0 min
+Histogram: 32 0 1 2 1 1 2 0 0 1
+Nghost:    1.25 ave 14 max 0 min
+Histogram: 33 1 1 0 2 1 0 1 0 1
+Neighs:    0.925 ave 8 max 0 min
+Histogram: 32 1 0 3 0 0 1 1 0 2
+
+Total # of neighbors = 37
+Ave neighs/atom = 0.137546
+Neighbor list builds = 377
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 10:42:03 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+17657455      269    0.081801897              0 
+17780933      269    0.081978219      1715.2603 
+Loop time of 1715.26 on 40 procs for 123478 steps with 269 atoms, finish time Sat Nov 26 11:10:38 2022
+
+
+Pair  time (%) = 0.278793 (0.0162537)
+Neigh time (%) = 0.069897 (0.00407501)
+Comm  time (%) = 1.27178 (0.0741448)
+Outpt time (%) = 0.000789077 (4.60033e-05)
+Other time (%) = 1713.64 (99.9055)
+
+Nlocal:    6.725 ave 48 max 0 min
+Histogram: 32 0 0 1 2 0 1 1 0 3
+Nghost:    1.6 ave 13 max 0 min
+Histogram: 30 1 4 1 0 0 0 2 0 2
+Neighs:    1.1 ave 8 max 0 min
+Histogram: 32 0 0 3 0 0 0 2 1 2
+
+Total # of neighbors = 44
+Ave neighs/atom = 0.163569
+Neighbor list builds = 376
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 11:10:38 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+17780933      269    0.081978219              0 
+17904411      269    0.082239956      1724.8224 
+Loop time of 1724.82 on 40 procs for 123478 steps with 269 atoms, finish time Sat Nov 26 11:39:23 2022
+
+
+Pair  time (%) = 0.27716 (0.0160689)
+Neigh time (%) = 0.0708461 (0.00410744)
+Comm  time (%) = 1.46373 (0.0848629)
+Outpt time (%) = 0.00074273 (4.30612e-05)
+Other time (%) = 1723.01 (99.8949)
+
+Nlocal:    6.725 ave 56 max 0 min
+Histogram: 32 0 0 1 3 1 1 1 0 1
+Nghost:    1.375 ave 14 max 0 min
+Histogram: 31 3 2 0 1 0 2 0 0 1
+Neighs:    0.75 ave 7 max 0 min
+Histogram: 32 2 1 0 1 1 0 1 0 2
+
+Total # of neighbors = 30
+Ave neighs/atom = 0.111524
+Neighbor list builds = 381
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 11:39:23 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+17904411      269    0.082239956              0 
+18027889      269    0.082552187      1710.3121 
+Loop time of 1710.31 on 40 procs for 123478 steps with 269 atoms, finish time Sat Nov 26 12:07:54 2022
+
+
+Pair  time (%) = 0.27155 (0.0158772)
+Neigh time (%) = 0.0702059 (0.00410486)
+Comm  time (%) = 1.63793 (0.095768)
+Outpt time (%) = 0.00108389 (6.3374e-05)
+Other time (%) = 1708.33 (99.8842)
+
+Nlocal:    6.725 ave 44 max 0 min
+Histogram: 32 0 0 0 1 1 2 0 1 3
+Nghost:    1.45 ave 12 max 0 min
+Histogram: 32 3 0 0 1 0 0 1 1 2
+Neighs:    0.9 ave 7 max 0 min
+Histogram: 32 0 1 0 3 0 0 0 3 1
+
+Total # of neighbors = 36
+Ave neighs/atom = 0.133829
+Neighbor list builds = 378
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 12:07:54 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+18027889      269    0.082552187              0 
+18151367      269    0.082875181      1787.2289 
+Loop time of 1787.23 on 40 procs for 123478 steps with 269 atoms, finish time Sat Nov 26 12:37:41 2022
+
+
+Pair  time (%) = 0.270829 (0.0151536)
+Neigh time (%) = 0.0695403 (0.00389095)
+Comm  time (%) = 1.4688 (0.0821831)
+Outpt time (%) = 0.000758659 (4.24489e-05)
+Other time (%) = 1785.42 (99.8987)
+
+Nlocal:    6.725 ave 52 max 0 min
+Histogram: 32 0 1 0 1 2 1 1 1 1
+Nghost:    1.325 ave 13 max 0 min
+Histogram: 33 3 0 0 0 0 1 1 0 2
+Neighs:    0.85 ave 7 max 0 min
+Histogram: 32 1 1 0 1 1 0 2 0 2
+
+Total # of neighbors = 34
+Ave neighs/atom = 0.126394
+Neighbor list builds = 375
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 12:37:41 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+18151367      269    0.082875181              0 
+18274845      268    0.083790639      1761.4732 
+Loop time of 1761.47 on 40 procs for 123478 steps with 268 atoms, finish time Sat Nov 26 13:07:03 2022
+
+
+Pair  time (%) = 0.275459 (0.015638)
+Neigh time (%) = 0.0701055 (0.00397994)
+Comm  time (%) = 1.45206 (0.0824343)
+Outpt time (%) = 0.00109048 (6.19075e-05)
+Other time (%) = 1759.67 (99.8979)
+
+Nlocal:    6.7 ave 45 max 0 min
+Histogram: 32 0 0 0 2 1 1 0 1 3
+Nghost:    1.4 ave 11 max 0 min
+Histogram: 31 3 0 2 0 0 1 0 0 3
+Neighs:    0.95 ave 8 max 0 min
+Histogram: 32 0 1 2 0 1 1 1 1 1
+
+Total # of neighbors = 38
+Ave neighs/atom = 0.141791
+Neighbor list builds = 379
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 13:07:03 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+18274845      268    0.083790639              0 
+18398323      267    0.083486121       1714.031 
+Loop time of 1714.03 on 40 procs for 123478 steps with 267 atoms, finish time Sat Nov 26 13:35:37 2022
+
+
+Pair  time (%) = 0.277416 (0.016185)
+Neigh time (%) = 0.0697068 (0.00406684)
+Comm  time (%) = 1.48338 (0.0865432)
+Outpt time (%) = 0.000790242 (4.61043e-05)
+Other time (%) = 1712.2 (99.8932)
+
+Nlocal:    6.675 ave 47 max 0 min
+Histogram: 32 0 0 0 2 2 0 1 1 2
+Nghost:    1.4 ave 12 max 0 min
+Histogram: 31 3 0 1 1 1 0 0 1 2
+Neighs:    1.05 ave 12 max 0 min
+Histogram: 32 3 0 0 1 3 0 0 0 1
+
+Total # of neighbors = 42
+Ave neighs/atom = 0.157303
+Neighbor list builds = 376
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 13:35:37 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+18398323      267    0.083486121              0 
+18521801      267    0.083875844      1708.2175 
+Loop time of 1708.22 on 40 procs for 123478 steps with 267 atoms, finish time Sat Nov 26 14:04:05 2022
+
+
+Pair  time (%) = 0.276794 (0.0162037)
+Neigh time (%) = 0.0684878 (0.00400931)
+Comm  time (%) = 1.35906 (0.0795603)
+Outpt time (%) = 0.00102106 (5.97732e-05)
+Other time (%) = 1706.51 (99.9002)
+
+Nlocal:    6.675 ave 44 max 0 min
+Histogram: 32 0 0 0 1 1 2 0 2 2
+Nghost:    1.6 ave 14 max 0 min
+Histogram: 31 2 2 1 0 0 1 2 0 1
+Neighs:    1.025 ave 11 max 0 min
+Histogram: 32 1 2 1 1 1 1 0 0 1
+
+Total # of neighbors = 41
+Ave neighs/atom = 0.153558
+Neighbor list builds = 369
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 14:04:05 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+18521801      267    0.083875844              0 
+18645279      267    0.083944022      1714.0233 
+Loop time of 1714.02 on 40 procs for 123478 steps with 267 atoms, finish time Sat Nov 26 14:32:39 2022
+
+
+Pair  time (%) = 0.278616 (0.0162551)
+Neigh time (%) = 0.0690567 (0.00402893)
+Comm  time (%) = 1.45084 (0.0846451)
+Outpt time (%) = 0.000738605 (4.30919e-05)
+Other time (%) = 1712.22 (99.895)
+
+Nlocal:    6.675 ave 44 max 0 min
+Histogram: 32 0 0 0 1 1 1 1 3 1
+Nghost:    1.525 ave 13 max 0 min
+Histogram: 32 2 0 1 2 0 0 1 0 2
+Neighs:    0.975 ave 10 max 0 min
+Histogram: 32 1 1 1 0 2 1 1 0 1
+
+Total # of neighbors = 39
+Ave neighs/atom = 0.146067
+Neighbor list builds = 372
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 14:32:39 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+18645279      267    0.083944022              0 
+18768757      267    0.084221356      1704.0153 
+Loop time of 1704.02 on 40 procs for 123478 steps with 267 atoms, finish time Sat Nov 26 15:01:03 2022
+
+
+Pair  time (%) = 0.279035 (0.0163751)
+Neigh time (%) = 0.069434 (0.00407473)
+Comm  time (%) = 1.37357 (0.0806078)
+Outpt time (%) = 0.00106997 (6.2791e-05)
+Other time (%) = 1702.29 (99.8989)
+
+Nlocal:    6.675 ave 44 max 0 min
+Histogram: 32 0 0 0 0 2 1 3 1 1
+Nghost:    1.625 ave 15 max 0 min
+Histogram: 31 1 4 0 0 1 0 0 2 1
+Neighs:    0.8 ave 6 max 0 min
+Histogram: 32 1 0 2 0 0 1 0 1 3
+
+Total # of neighbors = 32
+Ave neighs/atom = 0.11985
+Neighbor list builds = 375
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 15:01:03 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+18768757      267    0.084221356              0 
+18892235      266    0.084455664      1711.8597 
+Loop time of 1711.86 on 40 procs for 123478 steps with 266 atoms, finish time Sat Nov 26 15:29:35 2022
+
+
+Pair  time (%) = 0.278568 (0.0162728)
+Neigh time (%) = 0.0687204 (0.00401437)
+Comm  time (%) = 1.31587 (0.0768679)
+Outpt time (%) = 0.00070526 (4.11985e-05)
+Other time (%) = 1710.2 (99.9028)
+
+Nlocal:    6.65 ave 44 max 0 min
+Histogram: 32 0 0 0 0 2 1 3 1 1
+Nghost:    1.525 ave 13 max 0 min
+Histogram: 30 4 1 0 1 0 1 1 1 1
+Neighs:    0.95 ave 10 max 0 min
+Histogram: 32 1 2 1 0 0 2 0 1 1
+
+Total # of neighbors = 38
+Ave neighs/atom = 0.142857
+Neighbor list builds = 370
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 15:29:35 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+18892235      266    0.084455664              0 
+19015713      266    0.084703803      1705.6957 
+Loop time of 1705.7 on 40 procs for 123478 steps with 266 atoms, finish time Sat Nov 26 15:58:01 2022
+
+
+Pair  time (%) = 0.277431 (0.016265)
+Neigh time (%) = 0.0685029 (0.00401613)
+Comm  time (%) = 1.22672 (0.0719192)
+Outpt time (%) = 0.000741819 (4.34907e-05)
+Other time (%) = 1704.12 (99.9078)
+
+Nlocal:    6.65 ave 44 max 0 min
+Histogram: 32 0 0 0 0 2 1 3 1 1
+Nghost:    1.4 ave 13 max 0 min
+Histogram: 32 2 1 1 0 0 1 2 0 1
+Neighs:    0.9 ave 7 max 0 min
+Histogram: 32 1 0 0 0 3 0 2 1 1
+
+Total # of neighbors = 36
+Ave neighs/atom = 0.135338
+Neighbor list builds = 368
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 15:58:01 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+19015713      266    0.084703803              0 
+19139191      265    0.084785661      1709.3872 
+Loop time of 1709.39 on 40 procs for 123478 steps with 265 atoms, finish time Sat Nov 26 16:26:30 2022
+
+
+Pair  time (%) = 0.281727 (0.0164812)
+Neigh time (%) = 0.0691461 (0.00404508)
+Comm  time (%) = 1.14984 (0.0672664)
+Outpt time (%) = 0.00101083 (5.91341e-05)
+Other time (%) = 1707.89 (99.9121)
+
+Nlocal:    6.625 ave 44 max 0 min
+Histogram: 32 0 0 0 1 1 0 4 1 1
+Nghost:    1.45 ave 15 max 0 min
+Histogram: 33 1 1 0 1 1 1 1 0 1
+Neighs:    1 ave 8 max 0 min
+Histogram: 33 1 0 1 0 0 0 1 2 2
+
+Total # of neighbors = 40
+Ave neighs/atom = 0.150943
+Neighbor list builds = 373
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 16:26:31 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+19139191      265    0.084785661              0 
+19262669      265    0.084986097      1705.2663 
+Loop time of 1705.27 on 40 procs for 123478 steps with 265 atoms, finish time Sat Nov 26 16:54:56 2022
+
+
+Pair  time (%) = 0.284357 (0.0166752)
+Neigh time (%) = 0.0690297 (0.00404803)
+Comm  time (%) = 1.23592 (0.0724765)
+Outpt time (%) = 0.000755169 (4.42845e-05)
+Other time (%) = 1703.68 (99.9068)
+
+Nlocal:    6.625 ave 45 max 0 min
+Histogram: 32 0 0 0 1 1 2 1 1 2
+Nghost:    1.425 ave 12 max 0 min
+Histogram: 32 1 1 2 0 1 0 0 0 3
+Neighs:    1.05 ave 12 max 0 min
+Histogram: 33 0 2 0 1 3 0 0 0 1
+
+Total # of neighbors = 42
+Ave neighs/atom = 0.158491
+Neighbor list builds = 371
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 16:54:56 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+19262669      265    0.084986097              0 
+19386147      265    0.085090295      1710.5157 
+Loop time of 1710.52 on 40 procs for 123478 steps with 265 atoms, finish time Sat Nov 26 17:23:26 2022
+
+
+Pair  time (%) = 0.281127 (0.0164352)
+Neigh time (%) = 0.0682065 (0.00398748)
+Comm  time (%) = 1.22242 (0.0714652)
+Outpt time (%) = 0.000977187 (5.71282e-05)
+Other time (%) = 1708.94 (99.9081)
+
+Nlocal:    6.625 ave 41 max 0 min
+Histogram: 32 0 0 0 1 1 0 1 1 4
+Nghost:    1.45 ave 14 max 0 min
+Histogram: 34 1 0 0 0 2 0 1 1 1
+Neighs:    1.125 ave 10 max 0 min
+Histogram: 33 1 0 0 0 2 0 1 1 2
+
+Total # of neighbors = 45
+Ave neighs/atom = 0.169811
+Neighbor list builds = 368
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 17:23:26 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+19386147      265    0.085090295              0 
+19509625      265    0.085528458      1714.9856 
+Loop time of 1714.99 on 40 procs for 123478 steps with 265 atoms, finish time Sat Nov 26 17:52:02 2022
+
+
+Pair  time (%) = 0.278726 (0.0162524)
+Neigh time (%) = 0.0691399 (0.00403151)
+Comm  time (%) = 1.06629 (0.0621748)
+Outpt time (%) = 3.70383e-05 (2.15969e-06)
+Other time (%) = 1713.57 (99.9175)
+
+Nlocal:    6.625 ave 43 max 0 min
+Histogram: 32 0 0 0 1 1 1 1 2 2
+Nghost:    1.5 ave 13 max 0 min
+Histogram: 31 2 1 1 1 0 1 2 0 1
+Neighs:    1.1 ave 12 max 0 min
+Histogram: 33 0 1 2 0 2 1 0 0 1
+
+Total # of neighbors = 44
+Ave neighs/atom = 0.166038
+Neighbor list builds = 372
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 17:52:02 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+19509625      265    0.085528458              0 
+19633103      265    0.086184491      1717.2422 
+Loop time of 1717.24 on 40 procs for 123478 steps with 265 atoms, finish time Sat Nov 26 18:20:39 2022
+
+
+Pair  time (%) = 0.282285 (0.0164383)
+Neigh time (%) = 0.0689667 (0.00401613)
+Comm  time (%) = 1.20429 (0.0701292)
+Outpt time (%) = 0.000978854 (5.70015e-05)
+Other time (%) = 1715.69 (99.9094)
+
+Nlocal:    6.625 ave 42 max 0 min
+Histogram: 32 0 0 0 1 1 0 1 3 2
+Nghost:    1.325 ave 14 max 0 min
+Histogram: 33 2 0 0 1 2 0 1 0 1
+Neighs:    1.075 ave 10 max 0 min
+Histogram: 33 1 0 0 0 2 1 0 2 1
+
+Total # of neighbors = 43
+Ave neighs/atom = 0.162264
+Neighbor list builds = 372
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 18:20:39 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+19633103      265    0.086184491              0 
+19756581      264    0.085538746       1705.321 
+Loop time of 1705.32 on 40 procs for 123478 steps with 264 atoms, finish time Sat Nov 26 18:49:04 2022
+
+
+Pair  time (%) = 0.284116 (0.0166605)
+Neigh time (%) = 0.0680903 (0.00399282)
+Comm  time (%) = 1.06119 (0.0622283)
+Outpt time (%) = 0.000745704 (4.37281e-05)
+Other time (%) = 1703.91 (99.9171)
+
+Nlocal:    6.6 ave 48 max 0 min
+Histogram: 32 0 0 1 1 1 1 1 2 1
+Nghost:    1.45 ave 13 max 0 min
+Histogram: 32 2 0 2 0 0 1 1 0 2
+Neighs:    1 ave 10 max 0 min
+Histogram: 32 1 0 1 2 1 1 1 0 1
+
+Total # of neighbors = 40
+Ave neighs/atom = 0.151515
+Neighbor list builds = 368
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 18:49:04 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+19756581      264    0.085538746              0 
+19880059      264    0.085747023      1748.0498 
+Loop time of 1748.05 on 40 procs for 123478 steps with 264 atoms, finish time Sat Nov 26 19:18:12 2022
+
+
+Pair  time (%) = 0.281161 (0.0160842)
+Neigh time (%) = 0.0660165 (0.00377658)
+Comm  time (%) = 1.36393 (0.0780259)
+Outpt time (%) = 0.00110117 (6.29942e-05)
+Other time (%) = 1746.34 (99.9021)
+
+Nlocal:    6.6 ave 42 max 0 min
+Histogram: 32 0 0 1 0 1 0 1 2 3
+Nghost:    1.6 ave 13 max 0 min
+Histogram: 31 2 2 0 1 0 1 0 2 1
+Neighs:    1.05 ave 9 max 0 min
+Histogram: 32 2 0 0 1 1 1 0 2 1
+
+Total # of neighbors = 42
+Ave neighs/atom = 0.159091
+Neighbor list builds = 357
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 19:18:12 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+19880059      264    0.085747023              0 
+20003537      264    0.085910906      1709.3366 
+Loop time of 1709.34 on 40 procs for 123478 steps with 264 atoms, finish time Sat Nov 26 19:46:42 2022
+
+
+Pair  time (%) = 0.284732 (0.0166575)
+Neigh time (%) = 0.0666031 (0.00389643)
+Comm  time (%) = 1.28575 (0.0752194)
+Outpt time (%) = 0.000718154 (4.20136e-05)
+Other time (%) = 1707.7 (99.9042)
+
+Nlocal:    6.6 ave 48 max 0 min
+Histogram: 32 0 0 1 0 2 1 2 1 1
+Nghost:    1.625 ave 16 max 0 min
+Histogram: 33 1 1 1 0 1 1 0 1 1
+Neighs:    0.95 ave 10 max 0 min
+Histogram: 32 1 0 1 2 2 1 0 0 1
+
+Total # of neighbors = 38
+Ave neighs/atom = 0.143939
+Neighbor list builds = 359
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 19:46:42 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+20003537      264    0.085910906              0 
+20127015      264    0.086050433      1717.1569 
+Loop time of 1717.16 on 40 procs for 123478 steps with 264 atoms, finish time Sat Nov 26 20:15:19 2022
+
+
+Pair  time (%) = 0.282589 (0.0164568)
+Neigh time (%) = 0.0666069 (0.00387891)
+Comm  time (%) = 1.13422 (0.0660522)
+Outpt time (%) = 0.0129027 (0.000751398)
+Other time (%) = 1715.66 (99.9129)
+
+Nlocal:    6.6 ave 42 max 0 min
+Histogram: 32 0 0 1 0 1 0 1 3 2
+Nghost:    1.525 ave 13 max 0 min
+Histogram: 34 1 0 0 0 1 1 0 0 3
+Neighs:    1.025 ave 11 max 0 min
+Histogram: 34 1 0 0 2 0 0 2 0 1
+
+Total # of neighbors = 41
+Ave neighs/atom = 0.155303
+Neighbor list builds = 359
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 20:15:19 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+20127015      264    0.086050433              0 
+20250493      264     0.08620485      1711.8922 
+Loop time of 1711.89 on 40 procs for 123478 steps with 264 atoms, finish time Sat Nov 26 20:43:51 2022
+
+
+Pair  time (%) = 0.28726 (0.0167802)
+Neigh time (%) = 0.065497 (0.003826)
+Comm  time (%) = 1.21877 (0.0711943)
+Outpt time (%) = 0.00106867 (6.24263e-05)
+Other time (%) = 1710.32 (99.9081)
+
+Nlocal:    6.6 ave 55 max 0 min
+Histogram: 32 0 0 1 2 1 2 1 0 1
+Nghost:    1.45 ave 13 max 0 min
+Histogram: 33 0 1 2 0 1 1 0 0 2
+Neighs:    1.025 ave 15 max 0 min
+Histogram: 33 0 3 3 0 0 0 0 0 1
+
+Total # of neighbors = 41
+Ave neighs/atom = 0.155303
+Neighbor list builds = 354
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 20:43:51 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+20250493      264     0.08620485              0 
+20373971      264    0.086571647      1753.9267 
+Loop time of 1753.93 on 40 procs for 123478 steps with 264 atoms, finish time Sat Nov 26 21:13:05 2022
+
+
+Pair  time (%) = 0.284975 (0.0162478)
+Neigh time (%) = 0.0661413 (0.00377104)
+Comm  time (%) = 1.30052 (0.074149)
+Outpt time (%) = 0.000705375 (4.02169e-05)
+Other time (%) = 1752.27 (99.9058)
+
+Nlocal:    6.6 ave 43 max 0 min
+Histogram: 32 0 0 0 1 1 1 1 2 2
+Nghost:    1.425 ave 14 max 0 min
+Histogram: 34 1 0 0 1 1 1 0 0 2
+Neighs:    1.1 ave 11 max 0 min
+Histogram: 33 1 1 0 1 1 0 2 0 1
+
+Total # of neighbors = 44
+Ave neighs/atom = 0.166667
+Neighbor list builds = 357
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 21:13:09 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+20373971      264    0.086571647              0 
+20497449      264     0.08721691       1746.058 
+Loop time of 1746.06 on 40 procs for 123478 steps with 264 atoms, finish time Sat Nov 26 21:42:16 2022
+
+
+Pair  time (%) = 0.287364 (0.0164579)
+Neigh time (%) = 0.0651831 (0.00373316)
+Comm  time (%) = 1.28057 (0.0733404)
+Outpt time (%) = 0.00102972 (5.8974e-05)
+Other time (%) = 1744.42 (99.9064)
+
+Nlocal:    6.6 ave 53 max 0 min
+Histogram: 32 0 0 1 1 2 2 1 0 1
+Nghost:    1.625 ave 13 max 0 min
+Histogram: 33 0 0 3 0 0 0 1 1 2
+Neighs:    1.125 ave 14 max 0 min
+Histogram: 33 0 3 0 2 1 0 0 0 1
+
+Total # of neighbors = 45
+Ave neighs/atom = 0.170455
+Neighbor list builds = 352
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 21:42:16 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+20497449      264     0.08721691              0 
+20620927      262    0.086645938      1716.6082 
+Loop time of 1716.61 on 40 procs for 123478 steps with 262 atoms, finish time Sat Nov 26 22:10:52 2022
+
+
+Pair  time (%) = 0.288367 (0.0167987)
+Neigh time (%) = 0.0626533 (0.00364983)
+Comm  time (%) = 1.24655 (0.0726172)
+Outpt time (%) = 0.000701652 (4.08743e-05)
+Other time (%) = 1715.01 (99.9069)
+
+Nlocal:    6.55 ave 44 max 0 min
+Histogram: 32 0 0 0 0 2 2 1 1 2
+Nghost:    1.575 ave 14 max 0 min
+Histogram: 33 1 1 0 0 2 0 1 1 1
+Neighs:    1.3 ave 11 max 0 min
+Histogram: 32 1 0 1 2 1 0 0 1 2
+
+Total # of neighbors = 52
+Ave neighs/atom = 0.198473
+Neighbor list builds = 338
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 22:10:52 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+20620927      262    0.086645938              0 
+20744405      262    0.086866313      1709.3037 
+Loop time of 1709.3 on 40 procs for 123478 steps with 262 atoms, finish time Sat Nov 26 22:39:22 2022
+
+
+Pair  time (%) = 0.288787 (0.016895)
+Neigh time (%) = 0.0624435 (0.00365315)
+Comm  time (%) = 1.20981 (0.0707781)
+Outpt time (%) = 0.00107707 (6.3012e-05)
+Other time (%) = 1707.74 (99.9086)
+
+Nlocal:    6.55 ave 45 max 0 min
+Histogram: 32 0 0 0 1 2 0 3 0 2
+Nghost:    1.7 ave 15 max 0 min
+Histogram: 31 2 2 0 0 1 1 1 1 1
+Neighs:    1.225 ave 16 max 0 min
+Histogram: 33 1 2 0 3 0 0 0 0 1
+
+Total # of neighbors = 49
+Ave neighs/atom = 0.187023
+Neighbor list builds = 338
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 22:39:22 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+20744405      262    0.086866313              0 
+20867883      262    0.087634924      1709.9413 
+Loop time of 1709.94 on 40 procs for 123478 steps with 262 atoms, finish time Sat Nov 26 23:07:52 2022
+
+
+Pair  time (%) = 0.291166 (0.0170278)
+Neigh time (%) = 0.0625211 (0.00365633)
+Comm  time (%) = 1.18782 (0.0694654)
+Outpt time (%) = 0.000725045 (4.24017e-05)
+Other time (%) = 1708.4 (99.9098)
+
+Nlocal:    6.55 ave 42 max 0 min
+Histogram: 32 0 0 0 0 1 2 1 1 3
+Nghost:    1.575 ave 14 max 0 min
+Histogram: 33 1 1 0 1 0 1 0 1 2
+Neighs:    1.325 ave 14 max 0 min
+Histogram: 33 0 1 2 1 1 0 1 0 1
+
+Total # of neighbors = 53
+Ave neighs/atom = 0.20229
+Neighbor list builds = 337
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 23:07:52 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+20867883      262    0.087634924              0 
+20991361      261    0.087044611      1698.3719 
+Loop time of 1698.37 on 40 procs for 123478 steps with 261 atoms, finish time Sat Nov 26 23:36:10 2022
+
+
+Pair  time (%) = 0.291573 (0.0171678)
+Neigh time (%) = 0.0624728 (0.00367839)
+Comm  time (%) = 1.28087 (0.0754176)
+Outpt time (%) = 0.00104241 (6.13771e-05)
+Other time (%) = 1696.74 (99.9037)
+
+Nlocal:    6.525 ave 44 max 0 min
+Histogram: 32 0 0 0 0 3 1 1 1 2
+Nghost:    1.65 ave 14 max 0 min
+Histogram: 33 0 0 2 1 0 1 1 1 1
+Neighs:    1.2 ave 15 max 0 min
+Histogram: 33 0 1 3 1 1 0 0 0 1
+
+Total # of neighbors = 48
+Ave neighs/atom = 0.183908
+Neighbor list builds = 337
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sat Nov 26 23:36:10 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+20991361      261    0.087044611              0 
+21114839      261    0.087148505      1706.7218 
+Loop time of 1706.72 on 40 procs for 123478 steps with 261 atoms, finish time Sun Nov 27 00:04:37 2022
+
+
+Pair  time (%) = 0.292842 (0.0171581)
+Neigh time (%) = 0.0633751 (0.00371327)
+Comm  time (%) = 1.20879 (0.0708254)
+Outpt time (%) = 0.000658367 (3.85749e-05)
+Other time (%) = 1705.16 (99.9083)
+
+Nlocal:    6.525 ave 42 max 0 min
+Histogram: 32 0 0 0 1 0 1 2 3 1
+Nghost:    1.6 ave 14 max 0 min
+Histogram: 33 1 1 0 1 0 0 2 0 2
+Neighs:    1.35 ave 13 max 0 min
+Histogram: 33 0 0 3 0 1 1 1 0 1
+
+Total # of neighbors = 54
+Ave neighs/atom = 0.206897
+Neighbor list builds = 342
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 00:04:37 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+21114839      261    0.087148505              0 
+21238317      261    0.087340711      1717.7652 
+Loop time of 1717.77 on 40 procs for 123478 steps with 261 atoms, finish time Sun Nov 27 00:33:15 2022
+
+
+Pair  time (%) = 0.292 (0.0169988)
+Neigh time (%) = 0.0638188 (0.00371522)
+Comm  time (%) = 1.18754 (0.0691331)
+Outpt time (%) = 0.000805773 (4.69082e-05)
+Other time (%) = 1716.22 (99.9101)
+
+Nlocal:    6.525 ave 44 max 0 min
+Histogram: 32 0 0 0 0 3 1 1 1 2
+Nghost:    1.6 ave 13 max 0 min
+Histogram: 32 1 1 1 0 1 2 0 0 2
+Neighs:    1.225 ave 15 max 0 min
+Histogram: 33 1 1 1 2 0 0 0 1 1
+
+Total # of neighbors = 49
+Ave neighs/atom = 0.187739
+Neighbor list builds = 344
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 00:33:15 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+21238317      261    0.087340711              0 
+21361795      261    0.087526841      1709.9966 
+Loop time of 1710 on 40 procs for 123478 steps with 261 atoms, finish time Sun Nov 27 01:01:45 2022
+
+
+Pair  time (%) = 0.291648 (0.0170555)
+Neigh time (%) = 0.0639184 (0.00373793)
+Comm  time (%) = 1.34814 (0.0788385)
+Outpt time (%) = 0.000997529 (5.83351e-05)
+Other time (%) = 1708.29 (99.9003)
+
+Nlocal:    6.525 ave 42 max 0 min
+Histogram: 32 0 0 0 0 0 2 3 2 1
+Nghost:    1.5 ave 14 max 0 min
+Histogram: 33 1 1 1 0 1 0 1 0 2
+Neighs:    1.35 ave 14 max 0 min
+Histogram: 33 1 0 0 1 3 1 0 0 1
+
+Total # of neighbors = 54
+Ave neighs/atom = 0.206897
+Neighbor list builds = 346
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 01:01:45 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+21361795      261    0.087526841              0 
+21485273      261    0.087562745      1705.1185 
+Loop time of 1705.12 on 40 procs for 123478 steps with 261 atoms, finish time Sun Nov 27 01:30:10 2022
+
+
+Pair  time (%) = 0.290977 (0.0170649)
+Neigh time (%) = 0.0642394 (0.00376744)
+Comm  time (%) = 1.37675 (0.0807424)
+Outpt time (%) = 0.00079014 (4.63393e-05)
+Other time (%) = 1703.39 (99.8984)
+
+Nlocal:    6.525 ave 48 max 0 min
+Histogram: 32 0 0 0 2 2 0 1 2 1
+Nghost:    1.525 ave 15 max 0 min
+Histogram: 33 1 1 1 0 1 1 0 1 1
+Neighs:    1.25 ave 15 max 0 min
+Histogram: 34 0 1 0 2 1 0 1 0 1
+
+Total # of neighbors = 50
+Ave neighs/atom = 0.191571
+Neighbor list builds = 347
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 01:30:10 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+21485273      261    0.087562745              0 
+21608751      261    0.087667342      1707.8584 
+Loop time of 1707.86 on 40 procs for 123478 steps with 261 atoms, finish time Sun Nov 27 01:58:38 2022
+
+
+Pair  time (%) = 0.291781 (0.0170846)
+Neigh time (%) = 0.0638897 (0.00374092)
+Comm  time (%) = 1.50843 (0.0883229)
+Outpt time (%) = 0.000992644 (5.81222e-05)
+Other time (%) = 1705.99 (99.8908)
+
+Nlocal:    6.525 ave 42 max 0 min
+Histogram: 32 0 0 0 0 1 2 2 2 1
+Nghost:    1.525 ave 15 max 0 min
+Histogram: 34 1 0 0 1 1 1 0 0 2
+Neighs:    1.325 ave 14 max 0 min
+Histogram: 34 0 0 1 1 1 1 1 0 1
+
+Total # of neighbors = 53
+Ave neighs/atom = 0.203065
+Neighbor list builds = 345
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 01:58:38 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+21608751      261    0.087667342              0 
+21732229      261    0.087707864      1719.1367 
+Loop time of 1719.14 on 40 procs for 123478 steps with 261 atoms, finish time Sun Nov 27 02:27:17 2022
+
+
+Pair  time (%) = 0.293712 (0.0170848)
+Neigh time (%) = 0.0634114 (0.00368856)
+Comm  time (%) = 1.66863 (0.097062)
+Outpt time (%) = 0.000851546 (4.95334e-05)
+Other time (%) = 1717.11 (99.8821)
+
+Nlocal:    6.525 ave 46 max 0 min
+Histogram: 32 0 0 0 1 3 1 0 1 2
+Nghost:    1.675 ave 16 max 0 min
+Histogram: 32 2 1 0 1 1 1 0 0 2
+Neighs:    1.175 ave 16 max 0 min
+Histogram: 34 0 1 2 2 0 0 0 0 1
+
+Total # of neighbors = 47
+Ave neighs/atom = 0.180077
+Neighbor list builds = 343
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 02:27:17 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+21732229      261    0.087707864              0 
+21855707      261    0.087728505      1711.8852 
+Loop time of 1711.89 on 40 procs for 123478 steps with 261 atoms, finish time Sun Nov 27 02:55:49 2022
+
+
+Pair  time (%) = 0.293994 (0.0171737)
+Neigh time (%) = 0.0632719 (0.00369604)
+Comm  time (%) = 1.3998 (0.0817693)
+Outpt time (%) = 0.00101827 (5.94823e-05)
+Other time (%) = 1710.13 (99.8973)
+
+Nlocal:    6.525 ave 42 max 0 min
+Histogram: 32 0 0 0 0 1 1 3 1 2
+Nghost:    1.6 ave 17 max 0 min
+Histogram: 32 3 1 0 1 0 1 0 1 1
+Neighs:    1.325 ave 17 max 0 min
+Histogram: 34 0 1 2 1 0 1 0 0 1
+
+Total # of neighbors = 53
+Ave neighs/atom = 0.203065
+Neighbor list builds = 342
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 02:55:49 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+21855707      261    0.087728505              0 
+21979185      261     0.09034463      1706.6484 
+Loop time of 1706.65 on 40 procs for 123478 steps with 261 atoms, finish time Sun Nov 27 03:24:16 2022
+
+
+Pair  time (%) = 0.293482 (0.0171964)
+Neigh time (%) = 0.0637649 (0.00373626)
+Comm  time (%) = 1.39559 (0.0817734)
+Outpt time (%) = 0.0133124 (0.000780031)
+Other time (%) = 1704.88 (99.8965)
+
+Nlocal:    6.525 ave 49 max 0 min
+Histogram: 32 0 0 0 3 1 1 1 1 1
+Nghost:    1.975 ave 16 max 0 min
+Histogram: 30 4 0 0 1 1 2 0 1 1
+Neighs:    1.2 ave 19 max 0 min
+Histogram: 34 0 3 2 0 0 0 0 0 1
+
+Total # of neighbors = 48
+Ave neighs/atom = 0.183908
+Neighbor list builds = 341
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 03:24:16 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+21979185      261     0.09034463              0 
+22102663      260    0.087673524      1707.6466 
+Loop time of 1707.65 on 40 procs for 123478 steps with 260 atoms, finish time Sun Nov 27 03:52:44 2022
+
+
+Pair  time (%) = 0.293769 (0.0172032)
+Neigh time (%) = 0.0631075 (0.00369558)
+Comm  time (%) = 1.30356 (0.0763365)
+Outpt time (%) = 0.000985898 (5.77343e-05)
+Other time (%) = 1705.99 (99.9027)
+
+Nlocal:    6.5 ave 41 max 0 min
+Histogram: 32 0 0 0 0 1 1 3 1 2
+Nghost:    1.625 ave 16 max 0 min
+Histogram: 32 3 0 0 1 1 1 0 0 2
+Neighs:    1.225 ave 14 max 0 min
+Histogram: 34 0 0 2 1 0 2 0 0 1
+
+Total # of neighbors = 49
+Ave neighs/atom = 0.188462
+Neighbor list builds = 341
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 03:52:44 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+22102663      260    0.087673524              0 
+22226141      260     0.08781664      1725.5097 
+Loop time of 1725.51 on 40 procs for 123478 steps with 260 atoms, finish time Sun Nov 27 04:21:30 2022
+
+
+Pair  time (%) = 0.296727 (0.0171965)
+Neigh time (%) = 0.0637184 (0.00369273)
+Comm  time (%) = 1.16974 (0.0677908)
+Outpt time (%) = 0.000817733 (4.73908e-05)
+Other time (%) = 1723.98 (99.9113)
+
+Nlocal:    6.5 ave 52 max 0 min
+Histogram: 32 0 0 0 3 2 0 2 0 1
+Nghost:    1.575 ave 14 max 0 min
+Histogram: 31 3 1 1 0 1 0 1 0 2
+Neighs:    1.225 ave 18 max 0 min
+Histogram: 34 1 0 3 1 0 0 0 0 1
+
+Total # of neighbors = 49
+Ave neighs/atom = 0.188462
+Neighbor list builds = 342
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 04:21:30 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+22226141      260     0.08781664              0 
+22349619      259    0.087877074      1715.4835 
+Loop time of 1715.48 on 40 procs for 123478 steps with 259 atoms, finish time Sun Nov 27 04:50:05 2022
+
+
+Pair  time (%) = 0.294631 (0.0171748)
+Neigh time (%) = 0.0633566 (0.00369322)
+Comm  time (%) = 1.10622 (0.0644842)
+Outpt time (%) = 0.000670876 (3.91071e-05)
+Other time (%) = 1714.02 (99.9146)
+
+Nlocal:    6.475 ave 39 max 0 min
+Histogram: 32 0 0 0 0 2 0 1 2 3
+Nghost:    1.575 ave 15 max 0 min
+Histogram: 31 2 2 1 0 0 1 2 0 1
+Neighs:    1.225 ave 13 max 0 min
+Histogram: 33 1 0 1 2 0 2 0 0 1
+
+Total # of neighbors = 49
+Ave neighs/atom = 0.189189
+Neighbor list builds = 341
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 04:50:05 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+22349619      259    0.087877074              0 
+22473097      259    0.087831249      1711.2135 
+Loop time of 1711.21 on 40 procs for 123478 steps with 259 atoms, finish time Sun Nov 27 05:18:36 2022
+
+
+Pair  time (%) = 0.293544 (0.0171542)
+Neigh time (%) = 0.0630377 (0.0036838)
+Comm  time (%) = 1.08741 (0.0635463)
+Outpt time (%) = 0.00108677 (6.35086e-05)
+Other time (%) = 1709.77 (99.9156)
+
+Nlocal:    6.475 ave 48 max 0 min
+Histogram: 32 0 0 0 2 1 2 1 1 1
+Nghost:    1.425 ave 17 max 0 min
+Histogram: 33 1 2 1 0 2 0 0 0 1
+Neighs:    1.275 ave 16 max 0 min
+Histogram: 33 2 0 1 2 0 1 0 0 1
+
+Total # of neighbors = 51
+Ave neighs/atom = 0.196911
+Neighbor list builds = 341
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 05:18:37 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+22473097      259    0.087831249              0 
+22596575      259    0.087832933      1713.3138 
+Loop time of 1713.31 on 40 procs for 123478 steps with 259 atoms, finish time Sun Nov 27 05:47:10 2022
+
+
+Pair  time (%) = 0.293988 (0.017159)
+Neigh time (%) = 0.0633063 (0.00369496)
+Comm  time (%) = 1.07242 (0.0625932)
+Outpt time (%) = 9.38004e-05 (5.47479e-06)
+Other time (%) = 1711.88 (99.9165)
+
+Nlocal:    6.475 ave 41 max 0 min
+Histogram: 32 0 0 0 0 2 0 2 1 3
+Nghost:    1.525 ave 15 max 0 min
+Histogram: 31 2 3 0 0 0 2 0 1 1
+Neighs:    1.325 ave 13 max 0 min
+Histogram: 33 1 0 1 2 0 1 0 0 2
+
+Total # of neighbors = 53
+Ave neighs/atom = 0.204633
+Neighbor list builds = 341
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 05:47:10 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+22596575      259    0.087832933              0 
+22720053      259    0.087874853      1719.9094 
+Loop time of 1719.91 on 40 procs for 123478 steps with 259 atoms, finish time Sun Nov 27 06:15:50 2022
+
+
+Pair  time (%) = 0.296103 (0.0172162)
+Neigh time (%) = 0.0633449 (0.00368303)
+Comm  time (%) = 1.10545 (0.0642738)
+Outpt time (%) = 0.00106552 (6.19523e-05)
+Other time (%) = 1718.44 (99.9148)
+
+Nlocal:    6.475 ave 53 max 0 min
+Histogram: 32 0 0 1 2 2 1 1 0 1
+Nghost:    1.475 ave 14 max 0 min
+Histogram: 33 1 1 1 1 0 0 1 0 2
+Neighs:    1.325 ave 19 max 0 min
+Histogram: 33 2 0 2 2 0 0 0 0 1
+
+Total # of neighbors = 53
+Ave neighs/atom = 0.204633
+Neighbor list builds = 342
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 06:15:50 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+22720053      259    0.087874853              0 
+22843531      258    0.087800907      1714.4767 
+Loop time of 1714.48 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 06:44:24 2022
+
+
+Pair  time (%) = 0.294966 (0.0172044)
+Neigh time (%) = 0.0638613 (0.00372483)
+Comm  time (%) = 1.03644 (0.0604524)
+Outpt time (%) = 0.000769284 (4.48699e-05)
+Other time (%) = 1713.08 (99.9186)
+
+Nlocal:    6.45 ave 40 max 0 min
+Histogram: 32 0 0 0 0 1 1 2 1 3
+Nghost:    1.475 ave 13 max 0 min
+Histogram: 34 1 0 1 0 0 0 0 1 3
+Neighs:    1.4 ave 16 max 0 min
+Histogram: 33 1 0 3 0 1 1 0 0 1
+
+Total # of neighbors = 56
+Ave neighs/atom = 0.217054
+Neighbor list builds = 344
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 06:44:24 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+22843531      258    0.087800907              0 
+22967009      258    0.087696913      1707.9166 
+Loop time of 1707.92 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 07:12:52 2022
+
+
+Pair  time (%) = 0.293716 (0.0171973)
+Neigh time (%) = 0.0639098 (0.00374198)
+Comm  time (%) = 1.07765 (0.0630976)
+Outpt time (%) = 0.00108129 (6.33103e-05)
+Other time (%) = 1706.48 (99.9159)
+
+Nlocal:    6.45 ave 51 max 0 min
+Histogram: 32 0 0 1 1 2 1 2 0 1
+Nghost:    1.45 ave 14 max 0 min
+Histogram: 33 0 2 0 2 0 0 1 1 1
+Neighs:    1.325 ave 17 max 0 min
+Histogram: 33 2 0 0 3 1 0 0 0 1
+
+Total # of neighbors = 53
+Ave neighs/atom = 0.205426
+Neighbor list builds = 345
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 07:12:53 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+22967009      258    0.087696913              0 
+23090487      258    0.087826947      1709.7195 
+Loop time of 1709.72 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 07:41:22 2022
+
+
+Pair  time (%) = 0.293667 (0.0171763)
+Neigh time (%) = 0.0638518 (0.00373464)
+Comm  time (%) = 1.05428 (0.0616638)
+Outpt time (%) = 0.000729334 (4.26581e-05)
+Other time (%) = 1708.31 (99.9174)
+
+Nlocal:    6.45 ave 42 max 0 min
+Histogram: 32 0 0 0 0 2 1 2 0 3
+Nghost:    1.35 ave 14 max 0 min
+Histogram: 34 1 0 0 0 3 0 1 0 1
+Neighs:    1.3 ave 14 max 0 min
+Histogram: 33 1 0 2 1 1 0 0 0 2
+
+Total # of neighbors = 52
+Ave neighs/atom = 0.20155
+Neighbor list builds = 344
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 07:41:22 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+23090487      258    0.087826947              0 
+23213965      258       0.087762      1720.5087 
+Loop time of 1720.51 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 08:10:03 2022
+
+
+Pair  time (%) = 0.29528 (0.0171624)
+Neigh time (%) = 0.0639199 (0.00371518)
+Comm  time (%) = 1.04745 (0.0608804)
+Outpt time (%) = 0.00109365 (6.35657e-05)
+Other time (%) = 1719.1 (99.9182)
+
+Nlocal:    6.45 ave 48 max 0 min
+Histogram: 32 0 0 1 1 1 2 0 2 1
+Nghost:    1.55 ave 14 max 0 min
+Histogram: 33 1 0 1 1 0 0 3 0 1
+Neighs:    1.325 ave 16 max 0 min
+Histogram: 33 2 0 0 2 2 0 0 0 1
+
+Total # of neighbors = 53
+Ave neighs/atom = 0.205426
+Neighbor list builds = 345
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 08:10:03 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+23213965      258       0.087762              0 
+23337443      258    0.087945339         1814.2 
+Loop time of 1814.2 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 08:40:17 2022
+
+
+Pair  time (%) = 0.293547 (0.0161805)
+Neigh time (%) = 0.0641761 (0.00353743)
+Comm  time (%) = 1.04504 (0.0576033)
+Outpt time (%) = 0.000668655 (3.68567e-05)
+Other time (%) = 1812.8 (99.9226)
+
+Nlocal:    6.45 ave 41 max 0 min
+Histogram: 32 0 0 0 0 0 2 3 1 2
+Nghost:    1.325 ave 12 max 0 min
+Histogram: 34 0 1 0 0 1 1 1 0 2
+Neighs:    1.325 ave 13 max 0 min
+Histogram: 33 1 0 0 3 0 1 0 1 1
+
+Total # of neighbors = 53
+Ave neighs/atom = 0.205426
+Neighbor list builds = 346
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 08:40:17 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+23337443      258    0.087945339              0 
+23460921      258    0.087885611      1698.6539 
+Loop time of 1698.65 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 09:08:36 2022
+
+
+Pair  time (%) = 0.294321 (0.0173267)
+Neigh time (%) = 0.064154 (0.00377675)
+Comm  time (%) = 1.01151 (0.0595478)
+Outpt time (%) = 0.000717033 (4.22119e-05)
+Other time (%) = 1697.28 (99.9193)
+
+Nlocal:    6.45 ave 43 max 0 min
+Histogram: 32 0 0 0 1 1 1 2 0 3
+Nghost:    1.4 ave 11 max 0 min
+Histogram: 32 1 1 0 1 1 0 1 1 2
+Neighs:    1.275 ave 17 max 0 min
+Histogram: 34 1 0 1 2 1 0 0 0 1
+
+Total # of neighbors = 51
+Ave neighs/atom = 0.197674
+Neighbor list builds = 345
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 09:08:36 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+23460921      258    0.087885611              0 
+23584399      258    0.087964467      1715.3528 
+Loop time of 1715.35 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 09:37:11 2022
+
+
+Pair  time (%) = 0.293538 (0.0171124)
+Neigh time (%) = 0.0638307 (0.00372114)
+Comm  time (%) = 1.07521 (0.0626817)
+Outpt time (%) = 0.000960298 (5.59825e-05)
+Other time (%) = 1713.92 (99.9164)
+
+Nlocal:    6.45 ave 44 max 0 min
+Histogram: 32 0 0 0 0 1 3 2 0 2
+Nghost:    1.375 ave 13 max 0 min
+Histogram: 33 1 1 0 0 2 0 2 0 1
+Neighs:    1.3 ave 13 max 0 min
+Histogram: 34 0 0 0 2 1 1 0 1 1
+
+Total # of neighbors = 52
+Ave neighs/atom = 0.20155
+Neighbor list builds = 345
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 09:37:11 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+23584399      258    0.087964467              0 
+23707877      258    0.087869984      1709.0532 
+Loop time of 1709.05 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 10:05:40 2022
+
+
+Pair  time (%) = 0.293513 (0.017174)
+Neigh time (%) = 0.0636639 (0.0037251)
+Comm  time (%) = 1.03965 (0.0608321)
+Outpt time (%) = 0.000781521 (4.57283e-05)
+Other time (%) = 1707.66 (99.9182)
+
+Nlocal:    6.45 ave 42 max 0 min
+Histogram: 32 0 0 0 0 3 0 2 0 3
+Nghost:    1.45 ave 11 max 0 min
+Histogram: 32 1 1 0 1 0 2 0 0 3
+Neighs:    1.3 ave 15 max 0 min
+Histogram: 33 1 1 1 1 0 2 0 0 1
+
+Total # of neighbors = 52
+Ave neighs/atom = 0.20155
+Neighbor list builds = 343
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 10:05:41 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+23707877      258    0.087869984              0 
+23831355      258     0.08796973      1710.2446 
+Loop time of 1710.24 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 10:34:11 2022
+
+
+Pair  time (%) = 0.293304 (0.0171499)
+Neigh time (%) = 0.0637664 (0.00372849)
+Comm  time (%) = 1.00709 (0.0588859)
+Outpt time (%) = 0.00103879 (6.07393e-05)
+Other time (%) = 1708.88 (99.9202)
+
+Nlocal:    6.45 ave 44 max 0 min
+Histogram: 32 0 0 0 0 2 3 1 0 2
+Nghost:    1.5 ave 12 max 0 min
+Histogram: 32 2 1 0 0 0 1 1 1 2
+Neighs:    1.275 ave 13 max 0 min
+Histogram: 33 0 1 1 2 1 0 0 0 2
+
+Total # of neighbors = 51
+Ave neighs/atom = 0.197674
+Neighbor list builds = 344
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 10:34:11 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+23831355      258     0.08796973              0 
+23954833      258     0.08857902      1709.4809 
+Loop time of 1709.48 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 11:02:40 2022
+
+
+Pair  time (%) = 0.293678 (0.0171793)
+Neigh time (%) = 0.063948 (0.00374078)
+Comm  time (%) = 1.07998 (0.0631761)
+Outpt time (%) = 0.000804043 (4.70343e-05)
+Other time (%) = 1708.04 (99.9159)
+
+Nlocal:    6.45 ave 47 max 0 min
+Histogram: 32 0 0 0 1 3 1 0 1 2
+Nghost:    1.325 ave 11 max 0 min
+Histogram: 33 1 0 0 1 0 2 1 0 2
+Neighs:    1.45 ave 15 max 0 min
+Histogram: 33 0 2 0 2 0 1 0 1 1
+
+Total # of neighbors = 58
+Ave neighs/atom = 0.224806
+Neighbor list builds = 345
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 11:02:40 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+23954833      258     0.08857902              0 
+24078311      258    0.087996864      1708.5131 
+Loop time of 1708.51 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 11:31:09 2022
+
+
+Pair  time (%) = 0.294688 (0.0172482)
+Neigh time (%) = 0.0639034 (0.00374029)
+Comm  time (%) = 1.04117 (0.06094)
+Outpt time (%) = 0.00103424 (6.05343e-05)
+Other time (%) = 1707.11 (99.918)
+
+Nlocal:    6.45 ave 45 max 0 min
+Histogram: 32 0 0 0 0 3 2 0 1 2
+Nghost:    1.325 ave 13 max 0 min
+Histogram: 32 3 0 0 0 1 2 1 0 1
+Neighs:    1.45 ave 14 max 0 min
+Histogram: 33 0 1 0 3 1 0 0 0 2
+
+Total # of neighbors = 58
+Ave neighs/atom = 0.224806
+Neighbor list builds = 345
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 11:31:09 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+24078311      258    0.087996864              0 
+24201789      258    0.088064407       1721.941 
+Loop time of 1721.95 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 11:59:51 2022
+
+
+Pair  time (%) = 0.296203 (0.0172016)
+Neigh time (%) = 0.0639987 (0.00371665)
+Comm  time (%) = 1.13626 (0.0659869)
+Outpt time (%) = 0.000823425 (4.78195e-05)
+Other time (%) = 1720.45 (99.913)
+
+Nlocal:    6.45 ave 45 max 0 min
+Histogram: 32 0 0 0 1 2 2 0 0 3
+Nghost:    1.35 ave 13 max 0 min
+Histogram: 33 1 0 1 1 1 1 1 0 1
+Neighs:    1.4 ave 15 max 0 min
+Histogram: 32 1 2 0 1 2 1 0 0 1
+
+Total # of neighbors = 56
+Ave neighs/atom = 0.217054
+Neighbor list builds = 345
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 11:59:51 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+24201789      258    0.088064407              0 
+24325267      258    0.088088956      1705.2043 
+Loop time of 1705.2 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 12:28:17 2022
+
+
+Pair  time (%) = 0.295017 (0.017301)
+Neigh time (%) = 0.06388 (0.00374618)
+Comm  time (%) = 1.45663 (0.0854228)
+Outpt time (%) = 0.00100631 (5.90141e-05)
+Other time (%) = 1703.39 (99.8935)
+
+Nlocal:    6.45 ave 43 max 0 min
+Histogram: 32 0 0 0 0 2 2 1 1 2
+Nghost:    1.475 ave 13 max 0 min
+Histogram: 33 1 1 0 0 1 2 0 1 1
+Neighs:    1.375 ave 14 max 0 min
+Histogram: 33 0 1 0 3 1 0 1 0 1
+
+Total # of neighbors = 55
+Ave neighs/atom = 0.213178
+Neighbor list builds = 345
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 12:28:18 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+24325267      258    0.088088956              0 
+24448745      258    0.088187583       1710.436 
+Loop time of 1710.44 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 12:56:48 2022
+
+
+Pair  time (%) = 0.293746 (0.0171738)
+Neigh time (%) = 0.0635032 (0.00371269)
+Comm  time (%) = 1.37529 (0.0804059)
+Outpt time (%) = 0.000777543 (4.54587e-05)
+Other time (%) = 1708.7 (99.8987)
+
+Nlocal:    6.45 ave 50 max 0 min
+Histogram: 32 0 0 2 0 3 0 0 1 2
+Nghost:    1.45 ave 13 max 0 min
+Histogram: 33 1 0 2 0 1 1 0 0 2
+Neighs:    1.4 ave 14 max 0 min
+Histogram: 33 0 2 1 0 2 0 0 0 2
+
+Total # of neighbors = 56
+Ave neighs/atom = 0.217054
+Neighbor list builds = 343
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 12:56:48 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+24448745      258    0.088187583              0 
+24572223      258    0.088465356      1711.7522 
+Loop time of 1711.75 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 13:25:20 2022
+
+
+Pair  time (%) = 0.293868 (0.0171677)
+Neigh time (%) = 0.0635022 (0.00370978)
+Comm  time (%) = 1.45239 (0.0848479)
+Outpt time (%) = 0.000659295 (3.85158e-05)
+Other time (%) = 1709.94 (99.8942)
+
+Nlocal:    6.45 ave 43 max 0 min
+Histogram: 32 0 0 0 0 2 3 0 1 2
+Nghost:    1.425 ave 12 max 0 min
+Histogram: 31 4 0 0 1 0 1 0 0 3
+Neighs:    1.45 ave 17 max 0 min
+Histogram: 33 1 1 1 2 0 0 1 0 1
+
+Total # of neighbors = 58
+Ave neighs/atom = 0.224806
+Neighbor list builds = 343
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 123478
+Setting up run at Sun Nov 27 13:25:20 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+24572223      258    0.088465356              0 
+24695701      258     0.08832749      1721.5484 
+Loop time of 1721.55 on 40 procs for 123478 steps with 258 atoms, finish time Sun Nov 27 13:54:02 2022
+
+
+Pair  time (%) = 0.297218 (0.0172646)
+Neigh time (%) = 0.063362 (0.00368052)
+Comm  time (%) = 1.39724 (0.0811616)
+Outpt time (%) = 0.00111192 (6.45885e-05)
+Other time (%) = 1719.79 (99.8978)
+
+Nlocal:    6.45 ave 49 max 0 min
+Histogram: 32 0 0 1 2 2 0 0 2 1
+Nghost:    1.45 ave 14 max 0 min
+Histogram: 32 1 2 0 1 2 0 1 0 1
+Neighs:    1.25 ave 14 max 0 min
+Histogram: 33 0 2 1 0 2 1 0 0 1
+
+Total # of neighbors = 50
+Ave neighs/atom = 0.193798
+Neighbor list builds = 342
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 99
+Setting up run at Sun Nov 27 13:54:02 2022
+
+Memory usage per processor = 1082.6 Mbytes
+    Step    Atoms         KinEng            CPU 
+24695701      258     0.08832749              0 
+24695800      258    0.088218852      1.3174056 
+Loop time of 1.31742 on 40 procs for 99 steps with 258 atoms, finish time Sun Nov 27 13:54:03 2022
+
+
+Pair  time (%) = 0.000232167 (0.0176229)
+Neigh time (%) = 0 (0)
+Comm  time (%) = 0.000355961 (0.0270195)
+Outpt time (%) = 2.8934e-05 (0.00219626)
+Other time (%) = 1.3168 (99.9532)
+
+Nlocal:    6.45 ave 49 max 0 min
+Histogram: 32 0 0 1 2 2 0 0 2 1
+Nghost:    1.45 ave 13 max 0 min
+Histogram: 32 1 1 1 1 1 1 0 1 1
+Neighs:    1.275 ave 14 max 0 min
+Histogram: 33 0 2 1 0 2 1 0 0 1
+
+Total # of neighbors = 51
+Ave neighs/atom = 0.197674
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density #
