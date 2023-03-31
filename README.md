@@ -14,7 +14,7 @@ Each of these 40 subfolders include the below list of files:
 
 ### Input files
 #### In. file (Script of LIGGGHTS commands, more information on how they are generated:)
-- **in.cent_*walltype*_walls_*sizemultiplier*X_*transitionfraction*** (*walltype:* mesh, primitive *size_multiplier:* 30, 45, 60, 75 *transitionfraction:* none (mesh case), 0.001, 0.005, 0,025, 0,050, 0.075, 0.100, 0.150, 0.200, 0.250)
+- **in.cent_`walltype`_walls_`sizemultiplier`X_`transitionfraction`** (*walltype:* mesh, primitive *size_multiplier:* 30, 45, 60, 75 *transitionfraction:* none (mesh case), 0.001, 0.005, 0,025, 0,050, 0.075, 0.100, 0.150, 0.200, 0.250)
 
 #### Mesh files (For representing geometries, more information on how they are generated: )
 - **bottom_disk.stl** 
